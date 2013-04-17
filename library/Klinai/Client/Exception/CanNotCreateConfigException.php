@@ -1,5 +1,5 @@
 <?php
 
-namespace Kline\Client\Exception;
+namespace Klinai\Client\Exception;
 
 class CanNotCreateConfigException extends \RuntimeException implements ExceptionInterface {}

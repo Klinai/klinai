@@ -1,5 +1,5 @@
 <?php
 
-namespace Klinai\Client\Exception;
+namespace Klinai\Model\Exception;
 
 interface ExceptionInterface {}

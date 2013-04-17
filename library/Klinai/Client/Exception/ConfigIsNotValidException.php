@@ -1,5 +1,5 @@
 <?php
 
-namespace Kline\Client\Exception;
+namespace Klinai\Client\Exception;
 
 class ConfigIsNotValidException extends \RuntimeException implements ExceptionInterface {}

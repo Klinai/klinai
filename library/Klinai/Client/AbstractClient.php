@@ -2,19 +2,54 @@
 
 namespace Klinai\Client;
 
-class AbstractClient
+use Zend\Http\Request;
+
+use Zend\Http\Client as HttpClient;
+
+abstract class AbstractClient
 {
-    public function getDoc($docId);
-
-    public function storeDoc(Document $doc);
-
-    public function storeDocAsArray(array $doc);
-
-    public function storeAttachmentForDoc($attachment);
+    protected $httpClient;
+    protected $request;
     
-    public function request ($host,$path,$methode,$data)
+    public function __construct()
     {
+        $this->httpClient = new HttpClient();
+        $this->initRequest ();
+    }
 
+    /**
+     * 
+     * @return \Zend\Http\Client
+     */
+    public function getHttpClient ()
+    {
+        return $this->httpClient;
+    }
+
+    abstract public function getDoc($databaseName,$docId);
+
+    abstract public function storeDoc($databaseName,$doc);
+
+    abstract public function storeAttachmentForDoc($databaseName,$doc,$attachment);
+
+    public function sendRequest ()
+    {
+        $response = $this->getHttpClient()->send($this->getRequest());
+        $this->initRequest();
+        
+        return json_decode($response->getBody());
+    }
+    public function initRequest ()
+    {
+        $this->request = new Request();
+    }
+    /**
+     * 
+     * @return \Zend\Http\Request
+     */
+    public function getRequest ()
+    {
+        return $this->request;
     }
     
 
