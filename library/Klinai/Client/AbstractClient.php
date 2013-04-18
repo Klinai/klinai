@@ -2,19 +2,30 @@
 
 namespace Klinai\Client;
 
+use Klinai\Client\Exception\RequestException;
+
+use Zend\Http\Client\Adapter\Socket as HttpAdapterSocket;
+
+use Zend\Http\Client\Adapter\Curl as HttpAdapterCurl;
+
 use Zend\Http\Request;
 
 use Zend\Http\Client as HttpClient;
+
+use Zend\Http\Client\Adapter\Exception\InitializationException;
 
 abstract class AbstractClient
 {
     protected $httpClient;
     protected $request;
+    protected $adapter;
     
     public function __construct()
     {
         $this->httpClient = new HttpClient();
-        $this->initRequest ();
+        
+        $this->initRequest();
+        $this->initAdapter();
     }
 
     /**
@@ -34,14 +45,52 @@ abstract class AbstractClient
 
     public function sendRequest ()
     {
-        $response = $this->getHttpClient()->send($this->getRequest());
-        $this->initRequest();
-        
+        try {
+            $response = $this->getHttpClient()->send($this->getRequest());
+            $this->initRequest();
+        } catch (\RuntimeException $e) {
+            throw new RequestException(sprintf("some thing was failed: %s",$e->getMessage()), null, $e);
+        }
         return json_decode($response->getBody());
+    }
+    public function setTimeout ($ms)
+    {
+        $httpAdapter = $this->httpClient->getAdapter();
+        
+        if ( $httpAdapter instanceof HttpAdapterCurl || $httpAdapter instanceof HttpAdapterSocket ) {
+            $httpAdapter->setOptions(array('timeout' , ceil($ms / 1000) ));
+            
+            if ( $httpAdapter instanceof HttpAdapterCurl ) {
+                // @todo this is a bad fix... zend currently support no Milisec only Sec
+                $httpAdapter->setCurlOption(CURLOPT_CONNECTTIMEOUT_MS, $ms );
+            }
+            return true;
+        }
+        
+
+        var_dump($httpAdapter->getConfig());
+        return false;
     }
     public function initRequest ()
     {
         $this->request = new Request();
+    }
+    public function initAdapter ()
+    {
+        $adapterClassList = array (
+            'Zend\Http\Client\Adapter\Curl',
+            'Zend\Http\Client\Adapter\Socket'
+        );
+
+        foreach ( $adapterClassList as $adapterClass ) {
+            try {
+                $this->getHttpClient()->setAdapter(new $adapterClass());
+                return;
+            } catch ( InitializationException $e ) {
+                
+            }
+        }
+        throw new \RuntimeException("no adapter class can init");
     }
     /**
      * 
@@ -50,6 +99,14 @@ abstract class AbstractClient
     public function getRequest ()
     {
         return $this->request;
+    }
+    /**
+     * 
+     * @return \Zend\Http\Request
+     */
+    public function getAdapter ()
+    {
+        return $this->getHttpClient()->getAdapter();
     }
     
 
