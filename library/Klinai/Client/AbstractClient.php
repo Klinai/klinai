@@ -19,17 +19,17 @@ abstract class AbstractClient
     protected $httpClient;
     protected $request;
     protected $adapter;
-    
+
     public function __construct()
     {
         $this->httpClient = new HttpClient();
-        
+
         $this->initRequest();
         $this->initAdapter();
     }
 
     /**
-     * 
+     *
      * @return \Zend\Http\Client
      */
     public function getHttpClient ()
@@ -41,7 +41,7 @@ abstract class AbstractClient
 
     abstract public function storeDoc($databaseName,$doc);
 
-    abstract public function storeAttachmentForDoc($databaseName,$doc,$attachment);
+    abstract public function storeAttachment($databaseName,$doc,$attachment);
 
     public function sendRequest ()
     {
@@ -56,17 +56,16 @@ abstract class AbstractClient
     public function setTimeout ($ms)
     {
         $httpAdapter = $this->httpClient->getAdapter();
-        
+
         if ( $httpAdapter instanceof HttpAdapterCurl || $httpAdapter instanceof HttpAdapterSocket ) {
             $httpAdapter->setOptions(array('timeout' , ceil($ms / 1000) ));
-            
+
             if ( $httpAdapter instanceof HttpAdapterCurl ) {
                 // @todo this is a bad fix... zend currently support no Milisec only Sec
                 $httpAdapter->setCurlOption(CURLOPT_CONNECTTIMEOUT_MS, $ms );
             }
             return true;
         }
-        
 
         var_dump($httpAdapter->getConfig());
         return false;
@@ -87,13 +86,13 @@ abstract class AbstractClient
                 $this->getHttpClient()->setAdapter(new $adapterClass());
                 return;
             } catch ( InitializationException $e ) {
-                
+
             }
         }
         throw new \RuntimeException("no adapter class can init");
     }
     /**
-     * 
+     *
      * @return \Zend\Http\Request
      */
     public function getRequest ()
@@ -101,13 +100,13 @@ abstract class AbstractClient
         return $this->request;
     }
     /**
-     * 
+     *
      * @return \Zend\Http\Request
      */
     public function getAdapter ()
     {
         return $this->getHttpClient()->getAdapter();
     }
-    
+
 
 }

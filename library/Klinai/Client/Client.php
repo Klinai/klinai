@@ -16,7 +16,7 @@ class Client extends AbstractClient
     }
 
     /**
-     * 
+     *
      * @return ClientConfig
      */
     public function getConfig ()
@@ -44,7 +44,7 @@ class Client extends AbstractClient
         }
 
         $uri = $this->buildUri($databaseName,$doc->get('_id'),$this->getRequestParameters());
-        
+
         $request = $this->getRequest();
         $request->setUri($uri);
         $request->setMethod($request::METHOD_PUT);
@@ -54,28 +54,87 @@ class Client extends AbstractClient
         return $response;
     }
 
-    public function storeAttachmentForDoc($attachment, $doc,$databaseName)
+    public function storeAttachment($attachment, $doc,$databaseName)
     {
         throw new \Exception("currently not ready");
     }
 
-    public function buildUri($database,$docId,$parameters)
+    public function getAttachment($attachmentId, $docId,$databaseName)
     {
+        throw new \Exception("currently not ready");
+    }
+
+    public function getAttachmentAll($doc,$databaseName)
+    {
+        throw new \Exception("currently not ready");
+    }
+
+    public function buildUri($buildOptions)
+    {
+        $buildOptionsCases = array (
+            array('database','docId','parameters'),
+            array('database','docId','attachmentId','parameters'),
+            array('database','designId','viewId','parameters'),
+        );
+
+        $buildOptionsCase = null;
+        foreach ( $buildOptionsCases as $key=>$case ) {
+            foreach ( $case as $buildOptionKey ) {
+                if ( !isset($buildOptions[$buildOptionKey]) ) {
+                    continue 2;
+                }
+            }
+            $buildOptionsCase = $key;
+            break;
+        }
+
+        if ( $buildOptionsCase === null ) {
+            throw new \RuntimeException("buildOptions are not supported");
+        }
+
+        $database = $buildOptions['database'];
+
         $databaseData = $this->getConfig()->getDataForIndex($database);
-        
-        return implode ('/',array($databaseData['host'],$database,$docId)).
-               '?'.http_build_query($parameters);
+        $uriBuffer = array();
+
+        switch ($buildOptionsCase) {
+            case 0:
+                $uriBuffer[0][]=$databaseData['host'];
+                $uriBuffer[0][]=$database;
+                $uriBuffer[0][]=$buildOptions['docId'];
+                $uriBuffer[1]=$buildOptions['parameter'];
+                break;
+            case 1:
+                $uriBuffer[0][]=$databaseData['host'];
+                $uriBuffer[0][]=$database;
+                $uriBuffer[0][]=$buildOptions['docId'];
+                $uriBuffer[0][]=$buildOptions['attachmentId'];
+                $uriBuffer[1]=$buildOptions['parameter'];
+                break;
+            case 1:
+                $uriBuffer[0][]=$databaseData['host'];
+                $uriBuffer[0][]=$database;
+                $uriBuffer[0][]='_design';
+                $uriBuffer[0][]=$buildOptions['designId'];
+                $uriBuffer[0][]='_view';
+                $uriBuffer[0][]=$buildOptions['viewId'];
+                $uriBuffer[1]=$buildOptions['parameter'];
+                break;
+        }
+
+        return implode ('/',$uriBuffer[0]).
+               '?'.http_build_query($uriBuffer[1]);
     }
 
     public function getDatabaseNameFromFullId($docId)
     {
         preg_match('#^(?<database>[^/]+)/((?<idPrefix>_[^/]+)?(?<id>[^/]+))',$docId,$matches);
-        
+
         return $matches['database'];
     }
 
     /**
-     * 
+     *
      * @return multitype:
      */
     public function getRequestParameters()
@@ -84,7 +143,7 @@ class Client extends AbstractClient
     }
 
     /**
-     * 
+     *
      * @return multitype:
      */
     public function parseFQID($id)

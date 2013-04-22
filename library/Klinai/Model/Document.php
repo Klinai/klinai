@@ -3,6 +3,8 @@
 namespace Klinai\Model;
 
 
+use Kline\Model\Attachment;
+
 use Klinai\Client\AbstractClient;
 use Klinai\Model\Exception\InvalidArgumentException;
 
@@ -35,8 +37,8 @@ class Document
     {
         $client = $this->getClient();
         $databaseIndex = $this->getSourceDatabase();
-        
-        
+
+
         $response = $client->storeDoc($databaseIndex, $this);
 
         $this->fields->_id= $response->id;
@@ -51,13 +53,13 @@ class Document
         if ( $key == '_id' AND $this->get('_id') ) throw new InvalidArgumentException("Can't set _id field because it's already set");
         if ( substr($key,0,1) == '_' AND !in_array($key,couchClient::$allowed_underscored_properties) )
             throw new InvalidArgumentException("Property $key can't begin with an underscore");
-        
+
         $this->fields->$key = $value;
         return TRUE;
     }
 
     /**
-     * 
+     *
      * @return AbstractClient
      */
     protected function getClient()
@@ -96,5 +98,26 @@ class Document
     public function toJson()
     {
         return json_encode($this->fields);
+    }
+
+    public function getAttachment($attachmentId)
+    {
+        if ( $this->isAttachmentExists($attachmentId) ) {
+            throw new RuntimeException(sprintf('the attachment "%s" are not exists',$attachmentId));
+        }
+
+        $attachmentData = $this->fields->_attachments[$attachmentId];
+
+        return new Attachment($attachmentId,$attachmentData,$this);
+    }
+
+    public function isAttachmentExists($attachmentId)
+    {
+        return isset($this->fields->_attachments[$attachmentId]);
+    }
+
+    public function getAttachmentAll()
+    {
+
     }
 }

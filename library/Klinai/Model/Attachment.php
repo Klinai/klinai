@@ -2,7 +2,7 @@
 
 namespace Kline\Model;
 
-class Attachment
+class Attachment implements AttachmentInterface
 {
-    
+
 }
