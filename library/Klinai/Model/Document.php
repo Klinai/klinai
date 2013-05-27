@@ -3,7 +3,7 @@
 namespace Klinai\Model;
 
 
-use Kline\Model\Attachment;
+use Klinai\Model\Attachment;
 
 use Klinai\Client\AbstractClient;
 use Klinai\Model\Exception\InvalidArgumentException;
@@ -102,18 +102,18 @@ class Document
 
     public function getAttachment($attachmentId)
     {
-        if ( $this->isAttachmentExists($attachmentId) ) {
-            throw new RuntimeException(sprintf('the attachment "%s" are not exists',$attachmentId));
+        if ( !$this->isAttachmentExists($attachmentId) ) {
+            throw new \RuntimeException(sprintf('the attachment "%s" are not exists',$attachmentId));
         }
 
-        $attachmentData = $this->fields->_attachments[$attachmentId];
+        $attachmentData = $this->fields->_attachments->{$attachmentId};
 
         return new Attachment($attachmentId,$attachmentData,$this);
     }
 
     public function isAttachmentExists($attachmentId)
     {
-        return isset($this->fields->_attachments[$attachmentId]);
+        return isset($this->fields->_attachments->{$attachmentId});
     }
 
     public function getAttachmentAll()

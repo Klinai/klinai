@@ -26,7 +26,12 @@ class Client extends AbstractClient
 
     public function getDoc($databaseName,$docId)
     {
-        $uri = $this->buildUri($databaseName,$docId,$this->getRequestParameters());
+        $uriOptions = array(
+            'database'=>$databaseName,
+            'docId'=>$docId,
+            'parameters'=>$this->getRequestParameters()
+        );
+        $uri = $this->buildUri($uriOptions);
 
         $request = $this->getRequest();
         $request->setUri($uri);
@@ -34,6 +39,9 @@ class Client extends AbstractClient
 
         $response = $this->sendRequest();
 
+        if ( isset($response->error) ) {
+            throw $this->createExceptionInstance($response, $uriOptions);
+        }
         return new Document($response, $this, $databaseName);
     }
 
@@ -43,7 +51,11 @@ class Client extends AbstractClient
             throw new RuntimeException("doc is not a instance of (Document or stdClass or Array)");
         }
 
-        $uri = $this->buildUri($databaseName,$doc->get('_id'),$this->getRequestParameters());
+        $uri = $this->buildUri(array(
+            'database'=>$databaseName,
+            'docId'=>$doc->get('_id'),
+            'parameters'=>$this->getRequestParameters()
+        ));
 
         $request = $this->getRequest();
         $request->setUri($uri);
@@ -51,6 +63,10 @@ class Client extends AbstractClient
         $request->setContent($doc->toJson());
 
         $response = $this->sendRequest();
+
+        if ( isset($response->error) ) {
+            throw $this->createExceptionInstance($response, $uriOptions);
+        }
         return $response;
     }
 
@@ -60,6 +76,11 @@ class Client extends AbstractClient
     }
 
     public function getAttachment($attachmentId, $docId,$databaseName)
+    {
+        throw new \Exception("currently not ready");
+    }
+
+    public function getAttachmentContent($attachmentId, $docId,$databaseName)
     {
         throw new \Exception("currently not ready");
     }
@@ -89,7 +110,9 @@ class Client extends AbstractClient
         }
 
         if ( $buildOptionsCase === null ) {
-            throw new \RuntimeException("buildOptions are not supported");
+            $buildOptionKeys = implode(', ',array_keys($buildOptions));
+            $msg = sprintf("buildOptions are not supported (%s)",$buildOptionKeys);
+            throw new \RuntimeException($msg);
         }
 
         $database = $buildOptions['database'];
@@ -102,14 +125,14 @@ class Client extends AbstractClient
                 $uriBuffer[0][]=$databaseData['host'];
                 $uriBuffer[0][]=$database;
                 $uriBuffer[0][]=$buildOptions['docId'];
-                $uriBuffer[1]=$buildOptions['parameter'];
+                $uriBuffer[1]=$buildOptions['parameters'];
                 break;
             case 1:
                 $uriBuffer[0][]=$databaseData['host'];
                 $uriBuffer[0][]=$database;
                 $uriBuffer[0][]=$buildOptions['docId'];
                 $uriBuffer[0][]=$buildOptions['attachmentId'];
-                $uriBuffer[1]=$buildOptions['parameter'];
+                $uriBuffer[1]=$buildOptions['parameters'];
                 break;
             case 1:
                 $uriBuffer[0][]=$databaseData['host'];
@@ -118,7 +141,7 @@ class Client extends AbstractClient
                 $uriBuffer[0][]=$buildOptions['designId'];
                 $uriBuffer[0][]='_view';
                 $uriBuffer[0][]=$buildOptions['viewId'];
-                $uriBuffer[1]=$buildOptions['parameter'];
+                $uriBuffer[1]=$buildOptions['parameters'];
                 break;
         }
 

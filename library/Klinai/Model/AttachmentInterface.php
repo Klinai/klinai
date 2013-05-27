@@ -1,6 +1,6 @@
 <?php
 
-namespace Kline\Model;
+namespace Klinai\Model;
 
 interface AttachmentInterface
 {
@@ -13,4 +13,9 @@ interface AttachmentInterface
      * @return string
      */
     public function getId ();
+
+    /**
+     * @return string
+     */
+    public function pufferContent ();
 }

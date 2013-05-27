@@ -16,6 +16,9 @@ use Zend\Http\Client\Adapter\Exception\InitializationException;
 
 abstract class AbstractClient
 {
+
+    use \Klinai\Client\DetectErrorReasonTrait;
+
     protected $httpClient;
     protected $request;
     protected $adapter;
@@ -46,12 +49,15 @@ abstract class AbstractClient
     public function sendRequest ()
     {
         try {
-            $response = $this->getHttpClient()->send($this->getRequest());
+            $responseContent = $this->getHttpClient()->send($this->getRequest());
             $this->initRequest();
         } catch (\RuntimeException $e) {
             throw new RequestException(sprintf("some thing was failed: %s",$e->getMessage()), null, $e);
         }
-        return json_decode($response->getBody());
+
+        $response = json_decode($responseContent->getBody());
+
+        return $response;
     }
     public function setTimeout ($ms)
     {
