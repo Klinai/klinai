@@ -44,9 +44,7 @@ abstract class AbstractClient
 
     abstract public function storeDoc($databaseName,$doc);
 
-    abstract public function storeAttachment($databaseName,$doc,$attachment);
-
-    public function sendRequest ()
+    public function sendRequest ($jsonDecode=true)
     {
         try {
             $responseContent = $this->getHttpClient()->send($this->getRequest());
@@ -55,9 +53,11 @@ abstract class AbstractClient
             throw new RequestException(sprintf("some thing was failed: %s",$e->getMessage()), null, $e);
         }
 
-        $response = json_decode($responseContent->getBody());
-
-        return $response;
+        if ( $jsonDecode ) {
+            return json_decode($responseContent->getBody());
+        } else {
+            return $responseContent->getBody();
+        }
     }
     public function setTimeout ($ms)
     {

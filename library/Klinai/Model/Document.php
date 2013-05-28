@@ -7,18 +7,21 @@ use Klinai\Model\Attachment;
 
 use Klinai\Client\AbstractClient;
 use Klinai\Model\Exception\InvalidArgumentException;
+use Kline\Model\Database;
+use Klinai\Client\ClientAwareTrait;
 
 class Document
 {
+    use ClientAwareTrait;
+
     protected $fields;
-    protected $couchClient;
     protected $sourceDatabase;
     protected $autoRecord;
 
-    public function __construct(\stdClass $data,AbstractClient $couchClient,$sourceDatabase,$autoRecord=true)
+    public function __construct(\stdClass $data,AbstractClient $couchClient, $sourceDatabase,$autoRecord=true)
     {
         $this->fields=$data;
-        $this->couchClient=$couchClient;
+        $this->setClient($couchClient);
         $this->autoRecord = $autoRecord;
         $this->sourceDatabase = $sourceDatabase;
     }
@@ -28,6 +31,10 @@ class Document
         $this->sourceDatabase = $sourceDatabase;
     }
 
+    /**
+     *
+     * @return Ambigous <Database, unknown>
+     */
     public function getSourceDatabase()
     {
         return $this->sourceDatabase;
@@ -56,15 +63,6 @@ class Document
 
         $this->fields->$key = $value;
         return TRUE;
-    }
-
-    /**
-     *
-     * @return AbstractClient
-     */
-    protected function getClient()
-    {
-        return $this->couchClient;
     }
 
     public function set($key , $value = NULL)
@@ -108,7 +106,7 @@ class Document
 
         $attachmentData = $this->fields->_attachments->{$attachmentId};
 
-        return new Attachment($attachmentId,$attachmentData,$this);
+        return new Attachment($attachmentId,$attachmentData,$this,$this->getClient());
     }
 
     public function isAttachmentExists($attachmentId)

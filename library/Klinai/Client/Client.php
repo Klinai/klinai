@@ -70,19 +70,56 @@ class Client extends AbstractClient
         return $response;
     }
 
-    public function storeAttachment($attachment, $doc,$databaseName)
+    public function storeAttachmentByFile($databaseName, Document $doc, $attachmentId, $attachmentFilePath)
+    {
+        $parameters = array('rev'=>$doc->get('_rev') );
+
+        $uriOptions = array(
+            'database'=>$databaseName,
+            'docId'=>$doc->get('_id'),
+            'attachmentId'=>$attachmentId,
+            'parameters'=>array_merge($parameters,$this->getRequestParameters())
+        );
+        $uri = $this->buildUri($uriOptions);
+
+        $request = $this->getRequest();
+        $request->setUri($uri);
+        $request->setMethod($request::METHOD_PUT);
+        $request->
+
+        $response = $this->sendRequest();
+
+        if ( !is_string($response) && isset($response->error) ) {
+            throw $this->createExceptionInstance($response, $uriOptions);
+        }
+        return $response;
+    }
+
+    public function getAttachment($databaseName, $docId, $attachmentId)
     {
         throw new \Exception("currently not ready");
     }
 
-    public function getAttachment($attachmentId, $docId,$databaseName)
+    public function getAttachmentContent($databaseName, $docId, $attachmentId)
     {
-        throw new \Exception("currently not ready");
-    }
+        $uriOptions = array(
+            'database'=>$databaseName,
+            'docId'=>$docId,
+            'attachmentId'=>$attachmentId,
+            'parameters'=>$this->getRequestParameters()
+        );
+        $uri = $this->buildUri($uriOptions);
 
-    public function getAttachmentContent($attachmentId, $docId,$databaseName)
-    {
-        throw new \Exception("currently not ready");
+        $request = $this->getRequest();
+        $request->setUri($uri);
+        $request->setMethod($request::METHOD_GET);
+
+        $response = $this->sendRequest(false);
+
+        if ( !is_string($response) && isset($response->error) ) {
+            throw $this->createExceptionInstance($response, $uriOptions);
+        }
+        return $response;
     }
 
     public function getAttachmentAll($doc,$databaseName)
@@ -100,6 +137,10 @@ class Client extends AbstractClient
 
         $buildOptionsCase = null;
         foreach ( $buildOptionsCases as $key=>$case ) {
+            if ( count( $case ) !== count($buildOptions) ) {
+                continue;
+            }
+
             foreach ( $case as $buildOptionKey ) {
                 if ( !isset($buildOptions[$buildOptionKey]) ) {
                     continue 2;
@@ -110,7 +151,7 @@ class Client extends AbstractClient
         }
 
         if ( $buildOptionsCase === null ) {
-            $buildOptionKeys = implode(', ',array_keys($buildOptions));
+            $buildOptionKeys = var_export($buildOptions,true);
             $msg = sprintf("buildOptions are not supported (%s)",$buildOptionKeys);
             throw new \RuntimeException($msg);
         }
@@ -134,7 +175,7 @@ class Client extends AbstractClient
                 $uriBuffer[0][]=$buildOptions['attachmentId'];
                 $uriBuffer[1]=$buildOptions['parameters'];
                 break;
-            case 1:
+            case 2:
                 $uriBuffer[0][]=$databaseData['host'];
                 $uriBuffer[0][]=$database;
                 $uriBuffer[0][]='_design';
