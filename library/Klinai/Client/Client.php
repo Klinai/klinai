@@ -45,6 +45,28 @@ class Client extends AbstractClient
         return new Document($response, $this, $databaseName);
     }
 
+    public function getView($databaseName,$designId,$viewId)
+    {
+        $uriOptions = array(
+            'database'=>$databaseName,
+            'designId'=>$designId,
+            'viewId'=>$viewId,
+            'parameters'=>$this->getRequestParameters()
+        );
+        $uri = $this->buildUri($uriOptions);
+
+        $request = $this->getRequest();
+        $request->setUri($uri);
+        $request->setMethod($request::METHOD_GET);
+
+        $response = $this->sendRequest();
+
+        if ( isset($response->error) ) {
+            throw $this->createExceptionInstance($response, $uriOptions);
+        }
+        return $this->resultsToCouchDocuments($response, $databaseName);
+    }
+
     public function storeDoc($databaseName,$doc)
     {
         if ( !$doc instanceof Document && !$doc instanceof \stdClass && !is_array($doc)) {
@@ -130,9 +152,9 @@ class Client extends AbstractClient
     public function buildUri($buildOptions)
     {
         $buildOptionsCases = array (
-            array('database','docId','parameters'),
-            array('database','docId','attachmentId','parameters'),
-            array('database','designId','viewId','parameters'),
+            'doc'=>array('database','docId','parameters'),
+            'attachment'=>array('database','docId','attachmentId','parameters'),
+            'view'=>array('database','designId','viewId','parameters'),
         );
 
         $buildOptionsCase = null;
@@ -162,20 +184,20 @@ class Client extends AbstractClient
         $uriBuffer = array();
 
         switch ($buildOptionsCase) {
-            case 0:
+            case 'doc':
                 $uriBuffer[0][]=$databaseData['host'];
                 $uriBuffer[0][]=$database;
                 $uriBuffer[0][]=$buildOptions['docId'];
                 $uriBuffer[1]=$buildOptions['parameters'];
                 break;
-            case 1:
+            case 'attachment':
                 $uriBuffer[0][]=$databaseData['host'];
                 $uriBuffer[0][]=$database;
                 $uriBuffer[0][]=$buildOptions['docId'];
                 $uriBuffer[0][]=$buildOptions['attachmentId'];
                 $uriBuffer[1]=$buildOptions['parameters'];
                 break;
-            case 2:
+            case 'view':
                 $uriBuffer[0][]=$databaseData['host'];
                 $uriBuffer[0][]=$database;
                 $uriBuffer[0][]='_design';
@@ -213,5 +235,39 @@ class Client extends AbstractClient
     public function parseFQID($id)
     {
         throw new \Exception("currently not ready");
+    }
+
+    public function resultsToCouchDocuments ( $results, $databaseName ) {
+        if ( !$results->rows or !is_array($results->rows) )	return FALSE;
+        $back = array();
+        foreach ( $results->rows as $row ) {	// should have $row->key & $row->doc
+            if ( !$row->key or !$row->doc ) 	return false;
+            // create couchDocument
+            $cd = new Document($row->doc,$this,$databaseName);
+
+            // set key name
+            if ( is_string($row->key) ) {
+                $key = $row->key;
+            }
+            elseif ( is_array($row->key) &&
+                    !is_array(end($row->key)) &&
+                    !is_object(end($row->key))
+            ) {
+                $key = end($row->key);
+            }
+            else {
+                continue;
+            }
+
+            // set value in result array
+            if ( !isset($back[$key]) ) {
+                $back[$key] = $cd;
+            } elseif ( is_array($back[$key]) ) {
+                $back[$key][] = $cd;
+            } else {
+                $back[$key]   = array($back[$key],$cd);
+            }
+        }
+        return $back;
     }
 }
