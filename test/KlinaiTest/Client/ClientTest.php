@@ -1,9 +1,9 @@
 <?php
 
-namespace KlinaiTest;
+namespace KlinaiTest\Client;
 
 
-class DocumentTest extends PHPUnit_Framework_TestCase
+class ClientTest extends PHPUnit_Framework_TestCase
 {
     public function testCreateDocument()
     {
