@@ -9,3 +9,5 @@ services:
 
 before_script:
  - curl -X PUT localhost:5984/klinai_test_db
+
+script: phpunit
