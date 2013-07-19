@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Klinai" default="build">
+    <target name="travis" depends="tests-parallel,show-test-results" />
+    <target name="clean" description="Cleanup build artifacts">
+        <delete dir="${basedir}/build"/>
+    </target>
+    
+    <target name="prepare" depends="clean" description="Prepare for build">
+        <mkdir dir="${basedir}/build/test-results"/>
+    </target>
+
+    <target name="composer-install" description="Installs dependencies via composer install">
+        <sequential>
+            <exec executable="composer" failonerror="true">
+                <arg value="self-update" />
+            </exec>
+            <exec executable="composer" failonerror="true">
+                <arg value="--version" />
+            </exec>
+            <exec executable="composer" failonerror="true">
+                <env key="COMPOSER_ROOT_VERSION" value="dev-master"/>
+                <arg value="install" />
+                <arg value="--dev" />
+                <arg value="--prefer-source" />
+            </exec>
+        </sequential>
+    </target>
+	<target
+	        name="tests-parallel"
+	        depends="prepare,composer-install"
+	        description="Run tests for the various components in parallel"
+	    >
+        <parallel threadCount="8">
+            <component-test component="Client"/>
+            <component-test component="Model"/>
+        </parallel>
+	</target>
+
+    <target name="show-test-results" description="Display logged test results">
+        <concat>
+            <fileset dir="${basedir}/build/test-results/"/>
+        </concat>
+    </target>
+
+    <macrodef name="component-test">
+        <attribute name="component"/>
+        <sequential>
+            <echo output="${basedir}/build/test-results/@{component}.log" level="debug">
+
+                KlinaiTest/@{component}
+
+            </echo>
+            <exec
+                executable="${basedir}/vendor/bin/phpunit"
+                output="${basedir}/build/test-results/@{component}.log"
+                error="${basedir}/build/test-results/@{component}.log"
+                failonerror="true"
+                append="true"
+            >
+                <arg value="-c" />
+                <arg value="${basedir}/tests/phpunit.xml.dist" />
+                <arg value="${basedir}/tests/KlinaiTest/@{component}" />
+            </exec>
+        </sequential>
+    </macrodef>
+</project>
