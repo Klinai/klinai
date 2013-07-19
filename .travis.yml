@@ -7,7 +7,7 @@ php:
 script:
  - ant travis -keep-going
 
- services:
+services:
  - couchdb
 
 before_script:
