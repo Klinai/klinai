@@ -1,0 +1,14 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+
+script:
+ - ant travis -keep-going
+
+ services:
+ - couchdb
+ 
+before_script:
+ - curl -X PUT localhost:5984/klinai_test_db

@@ -1,0 +1,15 @@
+<phpunit bootstrap="./bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="Klinai Test Suite">
+            <directory>./KlinaiTest</directory>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+        </exclude>
+    </groups>
+
+    <listeners>
+    </listeners>
+</phpunit>

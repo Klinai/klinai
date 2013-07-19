@@ -1,0 +1,14 @@
+{
+    "name":"Klinai",
+    "version":"0.1.0-alpha1",
+    "type":"library",
+    "require": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Klinai\\": "library\\Klinai",
+            "KlinaiTest\\": "test\\KlinaiTest"
+        }
+    }
+}
