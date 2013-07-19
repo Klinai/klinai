@@ -4,9 +4,6 @@ php:
   - 5.4
   - 5.5
 
-script:
- - ant travis -keep-going
-
 services:
  - couchdb
 
