@@ -1,3 +1,3 @@
-### Welcome to the *Klinai * multi CouchDB driver
+### Welcome to the *Klinai* Multi-CouchDB-Driver
 
-Master: [![Build Status](https://secure.travis-ci.org/Klinai/klinai.png?branch=master)](http://travis-ci.org/zendframework/zf2)
+Master: [![Build Status](https://secure.travis-ci.org/Klinai/klinai.png?branch=master)](http://travis-ci.org/Klinai/klinai)
