@@ -5,17 +5,8 @@ namespace KlinaiTest\Client;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCreateDocument()
+    public function testClientConnect()
     {
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete();
     }
-    public function testGetDocument()
-    {
-        $this->assertTrue(FALSE);
-    }
-    public function testUpdateDocument()
-    {
-        $this->assertTrue(FALSE);
-    }
-
 }

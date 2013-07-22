@@ -1,21 +1,26 @@
 <?php
 
-namespace KlinaiTest\Document;
+namespace KlinaiTest\Model;
+
+use \PHPUnit_Framework_TestCase;
+
+class DocumentTest extends PHPUnit_Framework_TestCase {
 
 
-class DocumentTest extends \PHPUnit_Framework_TestCase
-{
     public function testCreateDocument()
     {
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete();
     }
     public function testGetDocument()
     {
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete();
     }
     public function testUpdateDocument()
     {
-        $this->assertTrue(FALSE);
+        $this->markTestIncomplete();
     }
-
+    public function testDeleteDocument()
+    {
+        $this->markTestIncomplete();
+    }
 }
