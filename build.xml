@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Klinai" default="build">
-    <target name="travis" depends="show-test-results" />
+    <target name="travis" depends="tests-parallel,show-test-results" />
     <target name="clean" description="Cleanup build artifacts">
         <delete dir="${basedir}/build"/>
     </target>
@@ -25,6 +25,16 @@
             </exec>
         </sequential>
     </target>
+	<target
+	        name="tests-parallel"
+	        depends="prepare,composer-install"
+	        description="Run tests for the various components in parallel"
+	    >
+        <parallel threadCount="1">
+            <component-test component="Client"/>
+            <component-test component="Model"/>
+        </parallel>
+	</target>
 
     <target name="show-test-results" description="Display logged test results">
         <concat>
