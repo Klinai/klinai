@@ -82,14 +82,14 @@ class Client extends AbstractClient
 
     public function storeDoc($databaseName, $doc)
     {
-        if ( !$docData instanceof Document &&
-             !$docData instanceof \stdClass &&
-             !is_array($docData)
+        if ( !$doc instanceof Document &&
+             !$doc instanceof \stdClass &&
+             !is_array($doc)
         ) {
             throw new RuntimeException("doc is not a instance of (Document or stdClass or Array)");
         }
 
-        if ( !$docData instanceof Document ) {
+        if ( !$doc instanceof Document ) {
             $doc = new Document($doc,$this,$databaseName);
         }
 
