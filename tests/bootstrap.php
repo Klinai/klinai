@@ -1,3 +1,3 @@
 <?php
 
-include __DIR__ . '/_autoload.php';
+require '_autoload.php';
