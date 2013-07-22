@@ -21,7 +21,7 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
         $config2->setConfig($this->configArray);
 
         // check database keys
-        $databaseKeys = array_keys($this->configArray['database']);
+        $databaseKeys = array_keys($this->configArray['databases']);
         $this->assertEquals($config1->getAllDatabase(),
                             $databaseKeys);
 
@@ -41,7 +41,8 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
     {
         $config = new ClientConfig($this->configArray);
 
-        $config->getDatabaseIndex($databaseIndex);
+        $config->getDatabaseIndex('client_test1');
+        $config->getDatabaseIndex('client_test2');
     }
 
     public function testNoExistDatabase()
