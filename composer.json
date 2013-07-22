@@ -4,7 +4,7 @@
     "type":"library",
     "require": {
         "php": ">=5.4",
-        "Zend\Http": ">=2.1"
+        "Zend\\Http": ">=2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
