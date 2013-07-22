@@ -8,19 +8,17 @@ use Klinai\Client\Client;
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
     protected $client;
+    protected $config;
 
     public function setUp()
     {
         $this->config = new ClientConfig( require '_files/config.php' );
-        $this->client = new Client($this->config);
+        $this->client = new Client();
+        $this->client->setConfig($this->config);
     }
 
     public function testSetConfig()
     {
-        $client = new Client($this->config);
-        $this->assertSame($this->config, $client->getConfig());
-
-
         $client = new Client();
         $client->setConfig($this->client);
         $this->assertSame($this->config, $client->getConfig());
