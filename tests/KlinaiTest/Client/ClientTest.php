@@ -17,10 +17,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testSetConfig()
     {
-        $config = new ClientConfig( require '_files/config.php' );
         $client = new Client($this->config);
+        $this->assertSame($this->config, $client->getConfig());
 
-        $this->assertSame($config, $client->getConfig());
+
+        $client = new Client();
+        $client->setConfig($this->client);
+        $this->assertSame($this->config, $client->getConfig());
     }
 
     public function testStoreDoc()
