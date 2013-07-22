@@ -108,7 +108,7 @@ class Client extends AbstractClient
         $response = $this->sendRequest();
 
         if ( isset($response->error) ) {
-            throw $this->createExceptionInstance($response, $uriOptions);
+            throw $this->createExceptionInstance($response, $buildOptions);
         }
         return $response;
     }
