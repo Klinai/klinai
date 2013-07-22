@@ -185,7 +185,7 @@ class Client extends AbstractClient
             }
 
             foreach ( $case as $buildOptionKey ) {
-                if ( !array_key_exists($buildOptions[$buildOptionKey]) ) {
+                if ( !array_key_exists($buildOptionKey,$buildOptions) ) {
                     continue 2;
                 }
             }
