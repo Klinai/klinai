@@ -10,5 +10,5 @@ services:
 before_script:
  - curl -X PUT localhost:5984/klinai_test_db
 
- script:
+script:
  - ant travis -keep-going
