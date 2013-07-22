@@ -5,8 +5,8 @@ Master: [![Build Status](https://secure.travis-ci.org/Klinai/klinai.png?branch=m
 
 ### TODO
 
-* [ ] allow alternativ HttpClients ( no nativ )
- * [ ] ZF2
- * [ ] Symfony
- * [ ] CakePHP
- * [ ] Custom client
+* allow alternativ HttpClients ( no nativ )
+ * Zend\Http
+ * Symfony
+ * CakePHP
+ * Custom client
