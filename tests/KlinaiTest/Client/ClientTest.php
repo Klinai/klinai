@@ -50,7 +50,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testDocumentIsNotExists()
     {
-        $this->setExpectedException0("Klinai\Client\Exception\DocumentNotExistsException");
+        $this->setExpectedException("Klinai\Client\Exception\DocumentNotExistsException");
         $this->markTestIncomplete();
     }
 }
