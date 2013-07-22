@@ -10,8 +10,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Klinai\\": "library\\Klinai",
-            "KlinaiTest\\": "test\\KlinaiTest"
+            "Klinai\\": "library\\Klinai"
         }
     }
 }
