@@ -41,8 +41,8 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
     {
         $config = new ClientConfig($this->configArray);
 
-        $config->getDatabaseIndex('client_test1');
-        $config->getDatabaseIndex('client_test2');
+        $config->getDataForIndex('client_test1');
+        $config->getDataForIndex('client_test2');
     }
 
     public function testNoExistDatabase()
