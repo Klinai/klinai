@@ -21,11 +21,12 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
         $config2->setConfig($this->configArray);
 
         // check database keys
+        $databaseKeys = array_keys($this->configArray['database']);
         $this->assertEquals($config1->getAllDatabase(),
-                            array_keys($this->configArray));
+                            $databaseKeys);
 
         $this->assertEquals($config2->getAllDatabase(),
-                            array_keys($this->configArray));
+                            $databaseKeys);
 
     }
 
