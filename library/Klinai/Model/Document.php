@@ -18,12 +18,24 @@ class Document
     protected $sourceDatabase;
     protected $autoRecord;
 
-    public function __construct(\stdClass $data,AbstractClient $couchClient, $sourceDatabase,$autoRecord=true)
+    public function __construct( $data,AbstractClient $couchClient, $sourceDatabase,$autoRecord=true)
     {
-        $this->fields=$data;
+        $this->setData($data);
         $this->setClient($couchClient);
         $this->autoRecord = $autoRecord;
         $this->sourceDatabase = $sourceDatabase;
+    }
+
+    protected function setData ( $data ) {
+        if ( is_array($data) ) {
+            $data = new \stdClass($data);
+        }
+
+        if (!$data instanceof \stdClass) {
+            throw new \RuntimeException("data ist not a instance of \stdClass");
+        }
+
+        $this->fields = $data;
     }
 
     public function setSourceDatabase($sourceDatabase)
@@ -44,7 +56,6 @@ class Document
     {
         $client = $this->getClient();
         $databaseIndex = $this->getSourceDatabase();
-
 
         $response = $client->storeDoc($databaseIndex, $this);
 
@@ -83,9 +94,14 @@ class Document
 
     public function get($key)
     {
+        return $this->has($key) ? $this->fields->$key : NULL;
+    }
+
+    public function has($key)
+    {
         $key = (string)$key;
         if (!strlen($key) ) throw new InvalidArgumentException("No key given");
-        return property_exists( $this->fields,$key ) ? $this->fields->$key : NULL;
+        return property_exists( $this->fields,$key ) ? true : false;
     }
 
     public function getFields()

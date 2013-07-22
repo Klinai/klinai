@@ -16,7 +16,6 @@ use Zend\Http\Client\Adapter\Exception\InitializationException;
 
 abstract class AbstractClient
 {
-
     use \Klinai\Client\DetectErrorReasonTrait;
 
     protected $httpClient;
@@ -73,7 +72,6 @@ abstract class AbstractClient
             return true;
         }
 
-        var_dump($httpAdapter->getConfig());
         return false;
     }
     public function initRequest ()

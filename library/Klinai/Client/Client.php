@@ -67,21 +67,42 @@ class Client extends AbstractClient
         return $this->resultsToCouchDocuments($response, $databaseName);
     }
 
-    public function storeDoc($databaseName,$doc)
+    public function storeDocByArray($databaseName, $docData)
     {
-        if ( !$doc instanceof Document && !$doc instanceof \stdClass && !is_array($doc)) {
+        if ( !$docData instanceof \stdClass && !is_array($docData)
+        ) {
             throw new RuntimeException("doc is not a instance of (Document or stdClass or Array)");
         }
 
-        $uri = $this->buildUri(array(
+        $doc = new Document($docData,$this,$databaseName);
+        $doc->record();
+
+        return $doc;
+    }
+
+    public function storeDoc($databaseName, $doc)
+    {
+        if ( !$docData instanceof Document &&
+             !$docData instanceof \stdClass &&
+             !is_array($docData)
+        ) {
+            throw new RuntimeException("doc is not a instance of (Document or stdClass or Array)");
+        }
+
+        if ( !$docData instanceof Document ) {
+            $doc = new Document($doc,$this,$databaseName);
+        }
+
+        $buildOptions = array(
             'database'=>$databaseName,
-            'docId'=>$doc->get('_id'),
+            'docId'=>$doc->get('_id'), // if _id not exists, we become NULL
             'parameters'=>$this->getRequestParameters()
-        ));
+        );
+        $uri = $this->buildUri($buildOptions);
 
         $request = $this->getRequest();
         $request->setUri($uri);
-        $request->setMethod($request::METHOD_PUT);
+        $request->setMethod($doc->has('_id') ? $request::METHOD_PUT : $request::METHOD_POST);
         $request->setContent($doc->toJson());
 
         $response = $this->sendRequest();
@@ -185,9 +206,16 @@ class Client extends AbstractClient
 
         switch ($buildOptionsCase) {
             case 'doc':
+                /**
+                 * if $buildOptions['docId'] is NULL we become ""
+                 * so we have a "host/somedatabase/" URL for a POST request
+                 *
+                 * this is only important for creating a new Doc
+                 */
                 $uriBuffer[0][]=$databaseData['host'];
                 $uriBuffer[0][]=$database;
-                $uriBuffer[0][]=$buildOptions['docId'];
+                $uriBuffer[0][]=(string) $buildOptions['docId'];
+
                 $uriBuffer[1]=$buildOptions['parameters'];
                 break;
             case 'attachment':

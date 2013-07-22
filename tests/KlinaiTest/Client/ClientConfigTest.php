@@ -49,7 +49,7 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
     {
         $config = new ClientConfig($this->configArray);
 
-        $this->assertFalse($config->hasDatabase("notExistsDatabase"));
+        $this->assertFalse($config->hasDatabase("notExistsDatabaseIndex"));
     }
 
     public function testGetNoExistDatabase()
@@ -57,6 +57,6 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException("Klinai\Client\Exception\DatabaseIndexIsNotExistsException");
 
         $config = new ClientConfig($this->configArray);
-        $data = $config->getDataForIndex("notExistsDatabase");
+        $data = $config->getDataForIndex("notExistsDatabaseIndex");
     }
 }
