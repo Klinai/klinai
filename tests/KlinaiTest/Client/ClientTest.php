@@ -20,7 +20,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testSetConfig()
     {
         $client = new Client();
-        $client->setConfig($this->client);
+        $client->setConfig($this->config);
         $this->assertSame($this->config, $client->getConfig());
     }
 
