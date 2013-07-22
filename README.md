@@ -9,4 +9,5 @@ Master: [![Build Status](https://secure.travis-ci.org/Klinai/klinai.png?branch=m
  * Zend\Http
  * Symfony
  * CakePHP
+ * guzzle/http ?
  * Custom client
