@@ -9,6 +9,7 @@ foreach ( $config['databases'] as $databaseKey => $databaseData ) {
     $ch = curl_init();
 
     curl_setopt($ch, CURLOPT_URL, $url );
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
 
     curl_setopt($ch, CURLOPT_PUT, 1);
     curl_setopt($ch, CURLOPT_HEADER, 0);
