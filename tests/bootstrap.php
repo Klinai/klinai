@@ -24,11 +24,4 @@ set_include_path(implode(PATH_SEPARATOR, $path));
 
 require '_autoload.php';
 
-
-
-
-
-
-
-
 unset($rootDir,$coreLibraryDir,$coreTestsDir,$path);
