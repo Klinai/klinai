@@ -44,7 +44,7 @@ trait DetectErrorReasonTrait {
                 break;
 
             default:
-                $exception = new \RuntimeException("unkown error");
+                $exception = new \RuntimeException("[unkown error] response:". $reasonOrResponse . ' uriOptions: ' . print_r( $options, true) );
         }
 
         return $exception;
