@@ -93,12 +93,12 @@ class Client extends AbstractClient
             $doc = new Document($doc,$this,$databaseName);
         }
 
-        $buildOptions = array(
+        $uriOptions = array(
             'database'=>$databaseName,
             'docId'=>$doc->get('_id'), // if _id not exists, we become NULL
             'parameters'=>$this->getRequestParameters()
         );
-        $uri = $this->buildUri($buildOptions);
+        $uri = $this->buildUri($uriOptions);
 
         $request = $this->getRequest();
         $request->setUri($uri);
@@ -108,7 +108,7 @@ class Client extends AbstractClient
         $response = $this->sendRequest();
 
         if ( isset($response->error) ) {
-            throw $this->createExceptionInstance($response, $buildOptions);
+            throw $this->createExceptionInstance($response, $uriOptions, array('uri'=>$uri));
         }
         return $response;
     }
@@ -133,7 +133,7 @@ class Client extends AbstractClient
         $response = $this->sendRequest();
 
         if ( !is_string($response) && isset($response->error) ) {
-            throw $this->createExceptionInstance($response, $uriOptions);
+            throw $this->createExceptionInstance($response, $uriOptions, array('uri'=>$uri));
         }
         return $response;
     }
@@ -160,7 +160,7 @@ class Client extends AbstractClient
         $response = $this->sendRequest(false);
 
         if ( !is_string($response) && isset($response->error) ) {
-            throw $this->createExceptionInstance($response, $uriOptions);
+            throw $this->createExceptionInstance($response, $uriOptions, array('uri'=>$uri));
         }
         return $response;
     }
