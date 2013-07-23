@@ -11,3 +11,4 @@ Master: [![Build Status](https://secure.travis-ci.org/Klinai/klinai.png?branch=m
  * CakePHP
  * guzzle/http ?
  * Custom client
+* [UnitTests](./tests/TODO.md)
