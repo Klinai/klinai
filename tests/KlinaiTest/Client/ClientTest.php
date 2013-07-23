@@ -50,10 +50,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute("id", $response1);
         $this->assertObjectHasAttribute("rev", $response1);
 
-
         $docData2 = array(
-            '_id'=>$response->id,
-            '_rev'=>$response->rev,
+            '_id'=>$response1->id,
+            '_rev'=>$response1->rev,
             'key1'=>'foo',
             'key2'=>'bar',
         );
