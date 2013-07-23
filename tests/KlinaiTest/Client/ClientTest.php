@@ -54,7 +54,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             '_id'=>$response1->id,
             '_rev'=>$response1->rev,
             'key1'=>'foo',
-            'key2'=>'bar',
+            'key2'=>'test',
         );
         $response2 = $this->client->storeDoc('client_test1', $docData2);
 
