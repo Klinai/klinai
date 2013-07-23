@@ -23,7 +23,7 @@ trait DetectErrorReasonTrait {
         return self::$ERROR_REASON_UNKOWN_ERROR;
     }
 
-    public function createExceptionInstance ($reasonOrResponse,$options) {
+    public function createExceptionInstance ($reasonOrResponse,$options,$extendedData) {
         if ( !is_int($reasonOrResponse) ) {
             $reason = $this->detectErrorReason($reasonOrResponse);
         } else {
@@ -44,7 +44,11 @@ trait DetectErrorReasonTrait {
                 break;
 
             default:
-                $exception = new \RuntimeException("[unkown error] response:". var_export( $reasonOrResponse, true) . ' uriOptions: ' . var_export( $options, true) );
+                $exception = new \RuntimeException("[unkown error]\n".
+                                                   "   response:". var_export( $reasonOrResponse, true) . "\n" .
+                                                   "   uriOptions: " . var_export( $options, true) . "\n" .
+                                                   "   extendedData: " . var_export( $extendedData, true)
+                );
         }
 
         return $exception;
