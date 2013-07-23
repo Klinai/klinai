@@ -12,3 +12,6 @@ before_script:
 
 script:
  - ant travis -keep-going
+
+notifications:
+  email: false
