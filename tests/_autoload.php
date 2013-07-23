@@ -20,5 +20,4 @@ EOM;
     exit(1);
 }
 
-$loader->add('KlinaiTest', __DIR__ );
-$loader->add('Klinai', __DIR__ . '/../library/' );
+$loader->add('KlinaiTest\\', __DIR__ );
