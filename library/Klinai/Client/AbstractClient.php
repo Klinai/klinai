@@ -78,7 +78,7 @@ abstract class AbstractClient
     public function initRequest ()
     {
         $this->request = new Request();
-        $this->request->addHeaderLine('content-type','application/json');
+        $this->request->getHeaders()->addHeaderLine('content-type','application/json');
     }
     public function initAdapter ()
     {
