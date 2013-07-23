@@ -10,7 +10,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     protected $client;
     protected $config;
 
-    public function setUpBeforeClass()
+    public static function setUpBeforeClass()
     {
         require '_files/initDefaultDatabase.php';
     }
