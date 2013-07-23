@@ -102,9 +102,8 @@ class Client extends AbstractClient
 
         $request = $this->getRequest();
 
-        $requestMethode = $doc->has('_id') ? $request::METHOD_PUT : $request::METHOD_POST;
         $request->setUri($uri);
-        $request->setMethod($requestMethode);
+        $request->setMethod($doc->has('_id') ? $request::METHOD_PUT : $request::METHOD_POST);
         $request->setContent($doc->toJson());
 
         $response = $this->sendRequest();
@@ -113,7 +112,10 @@ class Client extends AbstractClient
             throw $this->createExceptionInstance(
                 $response,
                 $uriOptions,
-                array('uri'=>$uri,'methode'=>$request->getMethod())
+                array(
+                    'uri'=>$uri,
+                    'methode'=>$request->getMethod()
+                )
             );
         }
         return $response;
