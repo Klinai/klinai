@@ -10,7 +10,7 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->configArray = require '_files/config.php';
+        $this->configArray = require './tests/_files/config.php';
     }
 
     public function testCreateClientConfig()
