@@ -13,6 +13,7 @@ use Zend\Http\Request;
 use Zend\Http\Client as HttpClient;
 
 use Zend\Http\Client\Adapter\Exception\InitializationException;
+use Zend\Http\Header\ContentType;
 
 abstract class AbstractClient
 {
@@ -77,6 +78,7 @@ abstract class AbstractClient
     public function initRequest ()
     {
         $this->request = new Request();
+        $this->request->addHeaderLine('content-type','application/json');
     }
     public function initAdapter ()
     {
