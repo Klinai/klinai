@@ -199,9 +199,9 @@ class Client extends AbstractClient
             throw new \RuntimeException($msg);
         }
 
-        $database = $buildOptions['database'];
+        $databaseIndex = $buildOptions['database'];
 
-        $databaseData = $this->getConfig()->getDataForIndex($database);
+        $databaseData = $this->getConfig()->getDataForIndex($databaseIndex);
         $uriBuffer = array();
 
         switch ($buildOptionsCase) {
@@ -213,7 +213,7 @@ class Client extends AbstractClient
                  * this is only important for creating a new Doc
                  */
                 $uriBuffer[0][]=$databaseData['host'];
-                $uriBuffer[0][]=$database;
+                $uriBuffer[0][]=$databaseData['dbname'];
                 $uriBuffer[0][]=(string) $buildOptions['docId'];
 
                 $uriBuffer[1]=$buildOptions['parameters'];
