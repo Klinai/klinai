@@ -28,13 +28,12 @@ class Document
 
     protected function setData ( $data ) {
         if ( is_array($data) ) {
-            $data = new \stdClass($data);
+            $data = (object) $data;
         }
 
         if (!$data instanceof \stdClass) {
             throw new \RuntimeException("data ist not a instance of \stdClass");
         }
-
         $this->fields = $data;
     }
 
