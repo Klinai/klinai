@@ -86,12 +86,15 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testDatabaseIsNotExists()
     {
         $this->setExpectedException("Klinai\Client\Exception\DatabaseNotExistsException");
-        $this->markTestIncomplete();
+
+
+        $response = $this->client->getDoc('not_exists_database', 'some_doc_id');
     }
 
     public function testDocumentIsNotExists()
     {
         $this->setExpectedException("Klinai\Client\Exception\DocumentNotExistsException");
-        $this->markTestIncomplete();
+
+        $response = $this->client->getDoc('client_test1', 'not_exists_document_id');
     }
 }
