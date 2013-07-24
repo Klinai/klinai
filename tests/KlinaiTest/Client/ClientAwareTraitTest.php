@@ -15,14 +15,13 @@ class ClientAwareTraitTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        /* @var $traitObject \PHPUnit_Framework_MockObject_MockObject */
         $this->traitObject = $this->createObjectForTrait();
         $this->client = new Client();
 
-        $this->r_setClient = new \ReflectionMethod($traitObject, 'setClient');
+        $this->r_setClient = new \ReflectionMethod($this->traitObject, 'setClient');
         $this->r_setClient->setAccessible(true);
 
-        $this->r_getClient = new \ReflectionMethod($traitObject, 'getClient');
+        $this->r_getClient = new \ReflectionMethod($this->traitObject, 'getClient');
         $this->r_getClient->setAccessible(true);
 
     }
