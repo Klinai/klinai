@@ -2,6 +2,10 @@
 
 $config = require __DIR__ . '/config.php';
 foreach ( $config['databases'] as $databaseKey => $databaseData ) {
+    if ( isset($databaseData['create']) && $databaseData['create'] === false ) {
+        continue;
+    }
+
     $url = $databaseData['host'] . '/' . $databaseData['dbname'];
 
 
