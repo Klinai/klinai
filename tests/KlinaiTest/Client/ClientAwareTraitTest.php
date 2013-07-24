@@ -18,6 +18,10 @@ class ClientAwareTraitTest extends \PHPUnit_Framework_TestCase
         $this->traitObject = $this->createObjectForTrait();
         $this->client = new Client();
 
+        // we need an property reflection because we dont want the setter or getter to controll the value
+        $this->r_client_property = new \ReflectionProperty($this->traitObject, 'couchClient');
+        $this->r_client_property->setAccessible(true);
+
         $this->r_setClient = new \ReflectionMethod($this->traitObject, 'setClient');
         $this->r_setClient->setAccessible(true);
 
@@ -43,17 +47,17 @@ class ClientAwareTraitTest extends \PHPUnit_Framework_TestCase
     {
         // must be same
         $this->r_setClient->invoke($this->traitObject,$this->client);
-        $client = $this->r_getClient->invoke($this->traitObject);
+
+        $client = $this->r_client_property->getValue($this->traitObject);
         $this->assertSame($client, $this->client);
     }
 
     public function testSetClientToNull()
     {
         // must be null
-        $this->r_setClient->invoke($this->traitObject,$this->client);
-        $this->r_setClient->invoke($this->traitObject,null);
+        $this->r_client_property->setValue($this->traitObject, null);
 
-        $client = $this->r_getClient->invoke($this->traitObject);
+        $client = $this->r_client_property->getValue($this->traitObject);
         $this->assertNull($client);
     }
 
@@ -62,6 +66,8 @@ class ClientAwareTraitTest extends \PHPUnit_Framework_TestCase
     public function testGetClientNull()
     {
         // first must be null
+        $this->r_client_property->setValue($this->traitObject, null);
+
         $client = $this->r_getClient->invoke($this->traitObject);
         $this->assertNull($client);
     }
@@ -70,7 +76,9 @@ class ClientAwareTraitTest extends \PHPUnit_Framework_TestCase
     public function testGetClientSame()
     {
         // secound must be same
-        $this->r_setClient->invoke($this->traitObject,$this->client);
+        // first must be null
+        $this->r_client_property->setValue($this->traitObject, $this->client);
+
         $client = $this->r_getClient->invoke($this->traitObject);
         $this->assertSame($client, $this->client);
     }
