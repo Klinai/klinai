@@ -30,11 +30,45 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function testValidConfig()
+    public function testValidateConfigIfSuccess()
     {
+        $config = new ClientConfig();
+        $this->assertTrue($config->validateConfig($this->configArray) );
+    }
+
+    public function testValidateConfigIfFaild()
+    {
+        $this->markTestSkipped('this function is currently not faild');
+
         $this->setExpectedException("Klinai\Client\Exception\ConfigIsNotValidException");
 
-        $this->markTestIncomplete("valid config");
+        $config = new ClientConfig();
+        $config->validateConfig(array());
+    }
+
+    public function testIsConfigValidIfSuccess()
+    {
+
+        $config = new ClientConfig();
+        $this->assertTrue( $config->isConfigValid($this->configArray) );
+    }
+
+    public function testIsConfigValidIfFaild()
+    {
+        $this->markTestSkipped('this function is currently not faild');
+
+        $config = new ClientConfig();
+        $this->assertFalse( $config->isConfigValid(array()) );
+    }
+
+    public function testIsConfigValidIfFaildThrow()
+    {
+        $this->markTestSkipped('this function is currently not faild');
+
+        $this->setExpectedException("Klinai\Client\Exception\ConfigIsNotValidException");
+
+        $config = new ClientConfig();
+        $config->isConfigValid(array(),true);
     }
 
     public function testGetConfigData()

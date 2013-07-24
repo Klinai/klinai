@@ -20,7 +20,7 @@ class ClientConfig implements ClientConfigInterface
     }
 
     /**
-     * 
+     *
      * @param unknown $databaseIndex
      * @throws DatabaseIndexIsNotExistskException
      */
@@ -32,7 +32,6 @@ class ClientConfig implements ClientConfigInterface
         if ( !isset($this->database[$databaseIndex]) ) {
             try {
                 throw new RuntimeException("currently not ready");
-//                 $this->database[$databaseIndex] = new 
             } catch (\Exception $e) {
                 throw new RuntimeException(sprintf('Database Object "%s" can\'t be created',$databaseIndex));
             }
@@ -42,7 +41,7 @@ class ClientConfig implements ClientConfigInterface
     }
 
     /**
-     * 
+     *
      * @param unknown $databaseIndex
      * @throws DatabaseIndexIsNotExistskException
      */
@@ -66,7 +65,7 @@ class ClientConfig implements ClientConfigInterface
     }
 
     /**
-     * 
+     *
      * @param array $config
      */
     public function setConfig($config)
@@ -77,7 +76,7 @@ class ClientConfig implements ClientConfigInterface
     }
 
     /**
-     * 
+     *
      * @param array $config
      * @param boolean $throw
      * @throws ConfigIsNotValidException
@@ -98,12 +97,20 @@ class ClientConfig implements ClientConfigInterface
     }
 
     /**
-     * 
+     *
      * @param array $config
      * @throws Exception\ConfigIsNotValidException
      * @return void
      */
     public function validateConfig(array $config)
     {
+        /**
+         * @todo validate the config file
+         * if validation is exists pls remove the skip mark from tests
+         * ClientConfigTest::testValidConfigIfFaild()
+         * ClientConfigTest::testIsConfigValidIfFaild()
+         * ClientConfigTest::testIsConfigValidIfFaildThrow()
+         */
+        return true;
     }
 }
