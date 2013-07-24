@@ -7,12 +7,16 @@
     
     <target name="prepare" depends="clean" description="Prepare for build">
         <mkdir dir="${basedir}/build/test-results"/>
+    	<!--
         <mkdir dir="${basedir}/build/cs-results"/>
+        -->
     </target>
 
+	<!--
     <target name="get-cs-fixer" depends="clean" description="Get coding standards fixer">
         <get src="http://cs.sensiolabs.org/get/php-cs-fixer.phar" dest="${basedir}/php-cs-fixer.phar"/>
     </target>
+	-->
 
     <target name="composer-install" description="Installs dependencies via composer install">
         <sequential>
@@ -30,21 +34,27 @@
             </exec>
         </sequential>
     </target>
+	<!-- 
+           depends="prepare,composer-install,get-cs-fixer" -->
 	<target
 	        name="tests-parallel"
-		   depends="prepare,composer-install,get-cs-fixer"
+		   depends="prepare,composer-install"
 	        description="Run tests for the various components in parallel"
 	    >
         <parallel threadCount="1">
             <component-test component="Client"/>
             <component-test component="Model"/>
+            <!--
         	<check-cs/>
+        	-->
         </parallel>
 	</target>
 
     <target name="show-test-results" description="Display logged test results">
         <concat>
+        	<!--
             <fileset dir="${basedir}/build/cs-results/"/>
+            -->
             <fileset dir="${basedir}/build/test-results/"/>
         </concat>
     </target>
@@ -70,7 +80,7 @@
             </exec>
         </sequential>
     </macrodef>
-
+<!--
     <macrodef name="check-cs">
         <sequential>
             <echo output="${basedir}/build/cs-results/check-cs.log" level="debug">
@@ -87,4 +97,5 @@
             />
         </sequential>
     </macrodef>
+	-->
 </project>
