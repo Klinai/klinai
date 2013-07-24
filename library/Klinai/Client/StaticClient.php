@@ -6,9 +6,9 @@ class SingleClient extends AbstractClient
 {
     public function __construct($databaseName, $hostDSN)
     {
-        
+
     }
-    
+
     public function getDoc($docId);
 
     public function storeDoc(Document $doc);

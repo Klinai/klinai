@@ -113,6 +113,4 @@ abstract class AbstractClient
     {
         return $this->getHttpClient()->getAdapter();
     }
-
-
 }

@@ -2,12 +2,14 @@
 
 namespace Klinai\Client;
 
-trait DetectErrorReasonTrait {
+trait DetectErrorReasonTrait
+{
     static $ERROR_REASON_UNKOWN_ERROR = 0;
     static $ERROR_REASON_DATABASE_NOT_EXISTS = 1;
     static $ERROR_REASON_DOCUMENT_NOT_EXISTS = 2;
 
-    public function detectErrorReason ($response) {
+    public function detectErrorReason ($response)
+    {
 
         if ( $response->error === "not_found" ) {
             switch ($response->reason) {
@@ -23,7 +25,8 @@ trait DetectErrorReasonTrait {
         return self::$ERROR_REASON_UNKOWN_ERROR;
     }
 
-    public function createExceptionInstance ($reasonOrResponse,$options,$extendedData) {
+    public function createExceptionInstance ($reasonOrResponse,$options,$extendedData)
+    {
         if ( !is_int($reasonOrResponse) ) {
             $reason = $this->detectErrorReason($reasonOrResponse);
         } else {
