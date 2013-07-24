@@ -4,7 +4,7 @@ namespace Klinai\Client;
 
 trait ClientAwareTrait
 {
-    protected $couchClient;
+    private $couchClient;
 
     /**
      *
