@@ -40,7 +40,8 @@ class Client extends AbstractClient
         $response = $this->sendRequest();
 
         if ( isset($response->error) ) {
-            throw $this->createExceptionInstance($response, $uriOptions);
+            $params = array('url'=>$uri,'methode'=>$request->getMethod());
+            throw $this->createExceptionInstance($response, $uriOptions,$params);
         }
         return new Document($response, $this, $databaseName);
     }
@@ -62,7 +63,8 @@ class Client extends AbstractClient
         $response = $this->sendRequest();
 
         if ( isset($response->error) ) {
-            throw $this->createExceptionInstance($response, $uriOptions);
+            $params = array('url'=>$uri,'methode'=>$request->getMethod());
+            throw $this->createExceptionInstance($response, $uriOptions,$params);
         }
         return $this->resultsToCouchDocuments($response, $databaseName);
     }
