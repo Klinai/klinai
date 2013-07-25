@@ -1,5 +1,5 @@
 {
-    "name":"Klinai",
+    "name":"klinai/klinai",
     "version":"0.1.0-alpha1",
     "type":"library",
     "require": {
