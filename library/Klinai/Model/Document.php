@@ -7,6 +7,7 @@ use Klinai\Model\Attachment;
 
 use Klinai\Client\AbstractClient;
 use Klinai\Model\Exception\InvalidArgumentException;
+use Klinai\Model\Exception\AttachmentIsNotExistsException;
 use Kline\Model\Database;
 use Klinai\Client\ClientAwareTrait;
 
@@ -113,10 +114,15 @@ class Document
         return json_encode($this->fields);
     }
 
+    /**
+     *
+     * @throws AttachmentIsNotExistsException
+     * @return Attachment
+     */
     public function getAttachment($attachmentId)
     {
         if ( !$this->isAttachmentExists($attachmentId) ) {
-            throw new \RuntimeException(sprintf('the attachment "%s" are not exists',$attachmentId));
+            throw new AttachmentIsNotExistsException(sprintf('the attachment "%s" are not exists',$attachmentId));
         }
 
         $attachmentData = $this->fields->_attachments->{$attachmentId};
