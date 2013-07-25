@@ -4,6 +4,7 @@ namespace KlinaiTest\Model;
 
 use \PHPUnit_Framework_TestCase;
 use Klinai\Model\Document;
+use Klinai\Client\ClientConfig;
 
 class DocumentTest extends PHPUnit_Framework_TestCase
 {
@@ -13,7 +14,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
     {
         $this->configArray = require './tests/_files/config.php';
         $this->mockClient = $this->getMock('Klinai\Client\Client');
-        $this->mockClient->setConfig($this->configArray);
+        $this->mockClient->setConfig(new ClientConfig($this->configArray));
     }
     public function testSetSourceDatabase()
     {
