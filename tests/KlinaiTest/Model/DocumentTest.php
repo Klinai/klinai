@@ -100,16 +100,17 @@ class DocumentTest extends PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete();
     }
+
     public function testIsAttachmentExists()
     {
-        $mockReturn = json_decode('{
+        $docData = json_decode('{
            "_id": "fooBar",
            "_rev": "1-7182e53ce7cd148307e40521e9ede288",
            "foo" : "dummy",
            "boo" : "dummy",
            "_attachments": {
                "attachment1": {
-                   "content_type": "image/jpeg",
+                   "content_type": "text/plain",
                    "revpos": 11,
                    "digest": "md5-ezhD8uRb10w4JpIqaH8R+A==",
                    "length": 125664,
@@ -118,28 +119,22 @@ class DocumentTest extends PHPUnit_Framework_TestCase
            }
         }',false);
 
-        $this->mockClient = $this->getMock('Klinai\Client\Client');
-        $this->mockClient->expects($this->once())
-                         ->method('getDoc')
-                         ->will($this->returnValue($mockReturn));
-
         /* @var $doc \Klinai\Model\Document */
-        $doc = $this->mockClient->getDoc ( 'client_test1', 'fooBar' );
+        $doc = new Document($docData,$this->mockClient,'client_test1' );
 
         $this->assertTrue($doc->isAttachmentExists('attachment1'));
         $this->assertFalse($doc->isAttachmentExists('notExists'));
-
     }
     public function testGetAttachment()
     {
-        $mockReturn = json_decode('{
+        $docData = json_decode('{
            "_id": "fooBar",
            "_rev": "1-7182e53ce7cd148307e40521e9ede288",
            "foo" : "dummy",
            "boo" : "dummy",
            "_attachments": {
                "attachment1": {
-                   "content_type": "image/jpeg",
+                   "content_type": "text/plain",
                    "revpos": 11,
                    "digest": "md5-ezhD8uRb10w4JpIqaH8R+A==",
                    "length": 125664,
@@ -148,14 +143,36 @@ class DocumentTest extends PHPUnit_Framework_TestCase
            }
         }',false);
 
-        $this->mockClient = $this->getMock('Klinai\Client\Client');
-        $this->mockClient->expects($this->once())
-                         ->method('getDoc')
-                         ->will($this->returnValue($mockReturn));
+        /* @var $doc \Klinai\Model\Document */
+        $doc = new Document($docData,$this->mockClient,'client_test1' );
+
+        $attachment = $doc->getAttachment('attachment1');
+
+        $this->assertInstanceOf($attachment, 'Klinai\Model\Attchment');
+    }
+
+    public function testGetAttachmentFaild()
+    {
+        $this->setExpectedException('Klinai\Model\Exception\AttachmentIsNotExistsException');
+
+        $docData = json_decode('{
+           "_id": "fooBar",
+           "_rev": "1-7182e53ce7cd148307e40521e9ede288",
+           "foo" : "dummy",
+           "boo" : "dummy",
+           "_attachments": {
+               "attachment1": {
+                   "content_type": "text/plain",
+                   "revpos": 11,
+                   "digest": "md5-ezhD8uRb10w4JpIqaH8R+A==",
+                   "length": 125664,
+                   "stub": true
+               },
+           }
+        }',false);
 
         /* @var $doc \Klinai\Model\Document */
-        $doc = $this->mockClient->getDoc ( 'client_test1', 'fooBar' );
-
-        $this->assertInstanceOf($doc->getAttachment('attachment1'),'Klinai\\Model\\Attchment');
+        $doc = new Document($docData,$this->mockClient,'client_test1' );
+        $attachment = $doc->getAttachment('notExistsAttachment');
     }
 }
