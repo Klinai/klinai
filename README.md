@@ -12,3 +12,4 @@ Master: [![Build Status](https://secure.travis-ci.org/Klinai/klinai.png?branch=m
  * guzzle/http ?
  * Custom client
 * [UnitTests](./tests/TODO.md)
+* Documentation mit sphinx (i18n)
