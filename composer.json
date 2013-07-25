@@ -2,6 +2,7 @@
     "name":"klinai/klinai",
     "version":"0.1.0-alpha1",
     "type":"library",
+    "description": "Multi CouchDB Client",
     "require": {
         "php": ">=5.4",
         "zendframework/zend-http": "2.*"
