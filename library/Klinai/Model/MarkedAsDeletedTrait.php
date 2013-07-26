@@ -2,6 +2,7 @@
 
 namespace Klinai\Model;
 
+use Klinai\Model\Exception\MarkedAsDeletedException;
 trait MarkedAsDeletedTrait {
 
     private $deleted;
