@@ -115,7 +115,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
                    "digest": "md5-ezhD8uRb10w4JpIqaH8R+A==",
                    "length": 125664,
                    "stub": true
-               },
+               }
            }
         }',false);
 
@@ -139,7 +139,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
                    "digest": "md5-ezhD8uRb10w4JpIqaH8R+A==",
                    "length": 125664,
                    "stub": true
-               },
+               }
            }
         }',false);
 
@@ -167,7 +167,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
                    "digest": "md5-ezhD8uRb10w4JpIqaH8R+A==",
                    "length": 125664,
                    "stub": true
-               },
+               }
            }
         }',false);
 
