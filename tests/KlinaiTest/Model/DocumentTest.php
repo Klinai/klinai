@@ -70,20 +70,21 @@ class DocumentTest extends PHPUnit_Framework_TestCase
             )
         );
 
+        $callback = function ($key) {
+            return $mockReturn[ $key ];
+        };
+
         $this->mockClient = $this->getMock('Klinai\Client\Client');
         $this->mockClient->expects($this->any())
                          ->method('getDoc')
                          ->with($this->equalTo('client_test1'),
-                                $this->equalTo('fooBar'))
-                         ->will($this->returnValue($mockReturn['fooBar']));
+                                $this->logicalOr(
+                                    $this->equalTo('fooBar'),
+                                    $this->equalTo('barfoo')
+                                ))
+                         ->will($this->returnCallback($callback));
 
         $doc1 = $this->mockClient->getDoc ( 'client_test1', 'fooBar' );
-
-        $this->mockClient->expects($this->any())
-                         ->method('getDoc')
-                         ->with($this->equalTo('client_test1'),
-                                $this->equalTo('barfoo'))
-                         ->will($this->returnValue($mockReturn['barfoo']));
         $doc2 = $this->mockClient->getDoc ( 'client_test1', 'barfoo' );
 
         $this->assertEquals($mockReturn['fooBar']->id,  $doc1->get('_id'));
