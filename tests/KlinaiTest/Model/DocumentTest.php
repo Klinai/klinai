@@ -70,8 +70,8 @@ class DocumentTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $callback = function ($key) use ($mockReturn) {
-            return $mockReturn[ $key ];
+        $callback = function ($databaseIndex,$docId) use ($mockReturn) {
+            return $mockReturn[ $docId ];
         };
 
         $this->mockClient = $this->getMock('Klinai\Client\Client');
