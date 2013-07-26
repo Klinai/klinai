@@ -98,7 +98,23 @@ class DocumentTest extends PHPUnit_Framework_TestCase
     }
     public function testDeleteDocument()
     {
-        $this->markTestIncomplete();
+        $data = (object) array (
+            '_id'=>'fooBar',
+            '_rev'=>'1-3491449E1G4S91S648S7E49FE',
+            'foo'=>'bar',
+            'boo'=>'bar',
+        );
+
+        $doc = new Document( $data, $this->mockClient, 'client_test1');
+
+        $this->mockClient->expects($this->any())
+                         ->method('deleteDocument')
+                         ->will($this->returnValue(null));
+
+        $doc->delete();
+
+        $this->setExpectedException('Klinai\Model\Exception\DocumentIsMarkedAsDeletedException');
+        $doc->record();
     }
 
     public function testIsAttachmentExists()
