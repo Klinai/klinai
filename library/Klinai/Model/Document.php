@@ -10,6 +10,7 @@ use Klinai\Model\Exception\InvalidArgumentException;
 use Klinai\Model\Exception\AttachmentIsNotExistsException;
 use Kline\Model\Database;
 use Klinai\Client\ClientAwareTrait;
+use Klinai\Model\Exception\DocumentIsMarkedAsDeletedException;
 
 class Document
 {
@@ -18,9 +19,11 @@ class Document
     protected $fields;
     protected $sourceDatabase;
     protected $autoRecord;
+    protected $deleted;
 
     public function __construct( $data,AbstractClient $couchClient, $sourceDatabase,$autoRecord=true)
     {
+        $this->deleted = false;
         $this->setData($data);
         $this->setClient($couchClient);
         $this->autoRecord = $autoRecord;
@@ -54,6 +57,7 @@ class Document
 
     public function record()
     {
+        $this->checkDeleteForDoSomething();
         $client = $this->getClient();
         $databaseIndex = $this->getSourceDatabase();
 
@@ -61,6 +65,34 @@ class Document
 
         $this->fields->_id= $response->id;
         $this->fields->_rev= $response->rev;
+    }
+
+    public function delete()
+    {
+        $this->checkDeleteForDoSomething();
+
+        $client = $this->getClient();
+        $databaseIndex = $this->getSourceDatabase();
+
+        $client->deleteDocument($databaseIndex, $this);
+        $this->setDeleted();
+    }
+
+    protected function setDeleted()
+    {
+        $this->deleted = true;
+    }
+
+    protected function isDeleted()
+    {
+        return $this->deleted;
+    }
+
+    protected function checkDeleteForDoSomething()
+    {
+        if ( $this->isDeleted() ) {
+            throw new DocumentIsMarkedAsDeletedException(sprintf( 'the document "xy" was deleted in the database. So has every action don`t have a effect', $this->_id ));
+        }
     }
 
     protected function setOne($key, $value)
@@ -131,6 +163,7 @@ class Document
      */
     public function getAttachment($attachmentId)
     {
+        $this->checkDeleteForDoSomething();
         if ( !$this->isAttachmentExists($attachmentId) ) {
             throw new AttachmentIsNotExistsException(sprintf('the attachment "%s" are not exists',$attachmentId));
         }
@@ -147,6 +180,7 @@ class Document
 
     public function getAttachmentAll()
     {
+        $this->checkDeleteForDoSomething();
 
     }
 
