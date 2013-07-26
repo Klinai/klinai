@@ -2,6 +2,7 @@
     "name":"klinai/klinai",
     "version":"0.1.0-alpha1",
     "type":"library",
+    "license":"LGPL-3.0",
     "description": "Multi CouchDB Client",
     "require": {
         "php": ">=5.4",
