@@ -148,7 +148,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
 
         $attachment = $doc->getAttachment('attachment1');
 
-        $this->assertInstanceOf('Klinai\Model\Attchment',$attachment);
+        $this->assertInstanceOf('Klinai\Model\Attachment',$attachment);
     }
 
     public function testGetAttachmentFaild()
