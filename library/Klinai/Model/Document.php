@@ -3,6 +3,8 @@
 namespace Klinai\Model;
 
 
+use Klinai\Model\Exception\MarkedAsDeletedException;
+
 use Klinai\Model\Attachment;
 
 use Klinai\Client\AbstractClient;
