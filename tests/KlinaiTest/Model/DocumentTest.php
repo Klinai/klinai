@@ -70,7 +70,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $callback = function ($key) {
+        $callback = function ($key) use ($mockReturn) {
             return $mockReturn[ $key ];
         };
 
