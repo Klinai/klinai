@@ -99,7 +99,7 @@ class Document
 
     public function __get($key)
     {
-        return $this->get();
+        return $this->get($key);
     }
 
     public function get($key)
