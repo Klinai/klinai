@@ -15,11 +15,11 @@ use Klinai\Model\Exception\DocumentIsMarkedAsDeletedException;
 class Document
 {
     use ClientAwareTrait;
+    use MarkedAsDeletedTrait;
 
     protected $fields;
     protected $sourceDatabase;
     protected $autoRecord;
-    protected $deleted;
 
     public function __construct( $data,AbstractClient $couchClient, $sourceDatabase,$autoRecord=true)
     {
@@ -78,20 +78,16 @@ class Document
         $this->setDeleted();
     }
 
-    protected function setDeleted()
-    {
-        $this->deleted = true;
-    }
-
-    protected function isDeleted()
-    {
-        return $this->deleted;
-    }
-
+    /**
+     *
+     */
     protected function checkDeleteForDoSomething()
     {
-        if ( $this->isDeleted() ) {
-            throw new DocumentIsMarkedAsDeletedException(sprintf( 'the document "xy" was deleted in the database. So has every action don`t have a effect', $this->_id ));
+        try {
+            parent::checkDeleteForDoSomething();
+        } catch ( MarkedAsDeletedException $preExc) {
+            $message = sprintf( 'the document "xy" was deleted in the database. So has every action don`t have a effect', $this->_id );
+            throw new DocumentIsMarkedAsDeletedException($message,null,$preExc);
         }
     }
 

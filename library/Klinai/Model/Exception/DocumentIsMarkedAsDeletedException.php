@@ -2,4 +2,4 @@
 
 namespace Klinai\Model\Exception;
 
-class DocumentIsMarkedAsDeletedException extends \RuntimeException implements ExceptionInterface {}
+class DocumentIsMarkedAsDeletedException extends MarkedAsDeletedException implements ExceptionInterface {}
