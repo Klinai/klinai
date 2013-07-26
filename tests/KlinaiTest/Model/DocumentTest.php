@@ -53,49 +53,49 @@ class DocumentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($mockReturn->id, $doc->get('_id'));
         $this->assertEquals($mockReturn->rev, $doc->get('_rev'));
     }
-    public function testGetDocument()
+    public function testUpdateDocument()
     {
-        $mockReturn = array(
-            'fooBar'=> (object) array (
-                'id'=>'fooBar',
-                'rev'=>'1-4861618161879616',
-                'foo'=>'bar',
-                'boo'=>'bar',
-            ),
-            'barfoo'=> (object) array (
-                'id'=>'barfoo',
-                'rev'=>'2-4861618161879616',
-                'foo'=>'dummy',
-                'boo'=>'dummy',
-            )
+        $firstData = (object) array (
+            '_id'=>'fooBar',
+            '_rev'=>'1-3491449E1G4S91S648S7E49FE',
+            'foo'=>'bar',
+            'boo'=>'bar',
+        );
+        $secoundData = (object) array (
+            'foo'=>'dummy',
+            'boo'=>'dummy',
         );
 
-        $callback = function ($databaseIndex,$docId) use ($mockReturn) {
-            return $mockReturn[ $docId ];
-        };
+        $mockReturn = (object) array (
+            'ok'=> true,
+            'id'=>$firstData['_id'],
+            'rev'=>'2-3491449E1F89EF1E6F87E49FE',
+        );
+
+        $doc = new Document($callback('client_test1', 'fooBar'), $this->mockClient, 'client_test1');
+        $doc->disableAutoRecord();
+
+        $doc->foo = $secoundData->foo;
+        $doc->boo = $secoundData->boo;
+
+        $this->assertEquals($doc->_id, $firstData->_id);
+        $this->assertEquals($doc->_rev, $firstData->_rev);
+        $this->assertEquals($doc->foo, $secoundData->foo);
+        $this->assertEquals($doc->boo, $secoundData->boo);
 
         $this->mockClient = $this->getMock('Klinai\Client\Client');
         $this->mockClient->expects($this->any())
-                         ->method('getDoc')
-                         ->with($this->equalTo('client_test1'),
-                                $this->logicalOr(
-                                    $this->equalTo('fooBar'),
-                                    $this->equalTo('barfoo')
-                                ))
-                         ->will($this->returnCallback($callback));
+                         ->method('storeDoc')
+                         ->with($this->equalTo('client_test1'),$this->anything())
+                         ->will($this->returnValue($mockReturn));
 
-        $doc1 = $this->mockClient->getDoc ( 'client_test1', 'fooBar' );
-        $doc2 = $this->mockClient->getDoc ( 'client_test1', 'barfoo' );
+        $doc->record();
 
-        $this->assertEquals($mockReturn['fooBar']->id,  $doc1->get('_id'));
-        $this->assertEquals($mockReturn['fooBar']->rev, $doc1->get('_rev'));
-        $this->assertEquals($mockReturn['fooBar']->foo, $doc1->get('foo'));
-        $this->assertEquals($mockReturn['fooBar']->boo, $doc1->get('boo'));
-
-        $this->assertEquals($mockReturn['barfoo']->id,  $doc2->get('_id'));
-        $this->assertEquals($mockReturn['barfoo']->rev, $doc2->get('_rev'));
-        $this->assertEquals($mockReturn['barfoo']->foo, $doc2->get('foo'));
-        $this->assertEquals($mockReturn['barfoo']->boo, $doc2->get('boo'));
+        $this->assertEquals($doc->_id, $firstData->_id);
+        $this->assertNotEquals($doc->_rev, $firstData->_rev);
+        $this->assertEquals($doc->_rev, $mockReturn->rev);
+        $this->assertEquals($doc->foo, $secoundData->foo);
+        $this->assertEquals($doc->boo, $secoundData->boo);
     }
     public function testDeleteDocument()
     {
