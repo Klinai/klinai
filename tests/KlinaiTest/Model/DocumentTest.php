@@ -72,6 +72,11 @@ class DocumentTest extends PHPUnit_Framework_TestCase
             'rev'=>'2-3491449E1F89EF1E6F87E49FE',
         );
 
+        $this->mockClient = $this->getMock('Klinai\Client\Client');
+        $this->mockClient->expects($this->any())
+                         ->method('storeDoc')
+                         ->will($this->returnValue($mockReturn));
+
         $doc = new Document($firstData, $this->mockClient, 'client_test1');
         $doc->disableAutoRecord();
 
@@ -82,12 +87,6 @@ class DocumentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($doc->_rev, $firstData->_rev);
         $this->assertEquals($doc->foo, $secoundData->foo);
         $this->assertEquals($doc->boo, $secoundData->boo);
-
-        $this->mockClient = $this->getMock('Klinai\Client\Client');
-        $this->mockClient->expects($this->any())
-                         ->method('storeDoc')
-                         ->with($this->equalTo('client_test1'),$this->anything())
-                         ->will($this->returnValue($mockReturn));
 
         $doc->record();
 
