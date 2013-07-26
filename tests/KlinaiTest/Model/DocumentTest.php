@@ -72,7 +72,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
             'rev'=>'2-3491449E1F89EF1E6F87E49FE',
         );
 
-        $doc = new Document($callback('client_test1', 'fooBar'), $this->mockClient, 'client_test1');
+        $doc = new Document($firstData, $this->mockClient, 'client_test1');
         $doc->disableAutoRecord();
 
         $doc->foo = $secoundData->foo;
