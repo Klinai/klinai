@@ -15,7 +15,9 @@ use Klinai\Model\Exception\DocumentIsMarkedAsDeletedException;
 class Document
 {
     use ClientAwareTrait;
-    use MarkedAsDeletedTrait;
+    use MarkedAsDeletedTrait {
+        checkDeleteForDoSomething as checkDeleteForDoSomethingTrait;
+    }
 
     protected $fields;
     protected $sourceDatabase;
@@ -84,7 +86,7 @@ class Document
     protected function checkDeleteForDoSomething()
     {
         try {
-            parent::checkDeleteForDoSomething();
+            $this->checkDeleteForDoSomethingTrait();
         } catch ( MarkedAsDeletedException $preExc) {
             $message = sprintf( 'the document "xy" was deleted in the database. So has every action don`t have a effect', $this->_id );
             throw new DocumentIsMarkedAsDeletedException($message,null,$preExc);
