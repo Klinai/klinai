@@ -15,6 +15,8 @@ trait DetectErrorReasonTrait
             switch ($response->reason) {
                 case 'no_db_file':
                     return self::$ERROR_REASON_DATABASE_NOT_EXISTS;
+                case 'deleted':
+                    return self::$ERROR_REASON_DOCUMENT_NOT_EXISTS;
                 case 'missing':
                     return self::$ERROR_REASON_DOCUMENT_NOT_EXISTS;
                 default:

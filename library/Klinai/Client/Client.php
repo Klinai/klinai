@@ -138,7 +138,6 @@ class Client extends AbstractClient
         $request = $this->getRequest();
         $request->setUri($uri);
         $request->setMethod($request::METHOD_PUT);
-        $request->
 
         $response = $this->sendRequest();
 
@@ -146,6 +145,48 @@ class Client extends AbstractClient
             throw $this->createExceptionInstance($response, $uriOptions, array('uri'=>$uri));
         }
         return $response;
+    }
+
+    public function deleteDocument($databaseName, &$doc)
+    {
+        if ( !$doc instanceof Document &&
+             !$doc instanceof \stdClass &&
+             !is_array($doc)
+        ) {
+            throw new RuntimeException("doc is not a instance of (Document or stdClass or Array)");
+        }
+
+        if ( !$doc instanceof Document ) {
+            $doc = new Document($doc,$this,$databaseName);
+        }
+
+        $parameters = array('rev'=>$doc->_rev );
+
+        $uriOptions = array(
+            'database'=>$databaseName,
+            'docId'=>$doc->_id,
+            'parameters'=>array_merge($parameters,$this->getRequestParameters())
+        );
+        $uri = $this->buildUri($uriOptions);
+
+        $request = $this->getRequest();
+        $request->setUri($uri);
+        $request->setMethod($request::METHOD_DELETE);
+
+        $response = $this->sendRequest();
+
+        $doc = null;
+
+        if ( !is_string($response) && isset($response->error) ) {
+            throw $this->createExceptionInstance($response, $uriOptions, array('uri'=>$uri));
+        }
+
+        return $response;
+    }
+
+    public function deleteAttachment($databaseName, $docId, $attachmentId)
+    {
+        throw new \Exception("currently not ready");
     }
 
     public function getAttachment($databaseName, $docId, $attachmentId)
