@@ -76,6 +76,11 @@ class Document
         return TRUE;
     }
 
+    public function __set($key , $value = NULL)
+    {
+        $this->set($key,$value);
+    }
+
     public function set($key , $value = NULL)
     {
         if ( func_num_args() == 1 ) {
@@ -90,6 +95,11 @@ class Document
             $this->record();
         }
         return TRUE;
+    }
+
+    public function __get($key)
+    {
+        return $this->get();
     }
 
     public function get($key)

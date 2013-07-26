@@ -78,8 +78,8 @@ class DocumentTest extends PHPUnit_Framework_TestCase
         $doc->foo = $secoundData->foo;
         $doc->boo = $secoundData->boo;
 
-        $this->assertEquals($doc->_id, $firstData->_id);
-        $this->assertEquals($doc->_rev, $firstData->_rev);
+        $this->assertEquals($doc->get('_id'), $firstData->_id);
+        $this->assertEquals($doc->get('_rev'), $firstData->_rev);
         $this->assertEquals($doc->foo, $secoundData->foo);
         $this->assertEquals($doc->boo, $secoundData->boo);
 
