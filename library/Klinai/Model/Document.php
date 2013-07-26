@@ -86,7 +86,7 @@ class Document
         } else {
             $this->setOne($key,$value);
         }
-        if ( $this->autoRecord ) {
+        if ( $this->isAutoRecordEnabled() ) {
             $this->record();
         }
         return TRUE;
@@ -138,5 +138,25 @@ class Document
     public function getAttachmentAll()
     {
 
+    }
+
+    public function disableAutoRecord()
+    {
+        $this->autoRecord = false;
+    }
+
+    public function enableAutoRecord()
+    {
+        $this->autoRecord = true;
+    }
+
+    public function setAutoRecord($autoRecord)
+    {
+        $this->autoRecord = (bool) $autoRecord;
+    }
+
+    public function isAutoRecordEnabled()
+    {
+        return (bool) $this->autoRecord;
     }
 }
