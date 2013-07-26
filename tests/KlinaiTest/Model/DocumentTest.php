@@ -68,7 +68,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
 
         $mockReturn = (object) array (
             'ok'=> true,
-            'id'=>$firstData['_id'],
+            'id'=>$firstData->_id,
             'rev'=>'2-3491449E1F89EF1E6F87E49FE',
         );
 
