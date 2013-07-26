@@ -77,13 +77,13 @@ class DocumentTest extends PHPUnit_Framework_TestCase
                                 $this->equalTo('fooBar'))
                          ->will($this->returnValue($mockReturn['fooBar']));
 
+        $doc1 = $this->mockClient->getDoc ( 'client_test1', 'fooBar' );
+
         $this->mockClient->expects($this->once())
                          ->method('getDoc')
                          ->with($this->equalTo('client_test1'),
                                 $this->equalTo('barfoo'))
                          ->will($this->returnValue($mockReturn['barfoo']));
-
-        $doc1 = $this->mockClient->getDoc ( 'client_test1', 'fooBar' );
         $doc2 = $this->mockClient->getDoc ( 'client_test1', 'barfoo' );
 
         $this->assertEquals($mockReturn['fooBar']->id,  $doc1->get('_id'));
@@ -148,7 +148,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
 
         $attachment = $doc->getAttachment('attachment1');
 
-        $this->assertInstanceOf($attachment, 'Klinai\Model\Attchment');
+        $this->assertInstanceOf('Klinai\Model\Attchment',$attachment);
     }
 
     public function testGetAttachmentFaild()
