@@ -77,7 +77,7 @@ class DocumentTest extends PHPUnit_Framework_TestCase
                          ->method('storeDoc')
                          ->will($this->returnValue($mockReturn));
 
-        $doc = new Document($firstData, $this->mockClient, 'client_test1');
+        $doc = new Document( clone $firstData, $this->mockClient, 'client_test1');
         $doc->disableAutoRecord();
 
         $doc->foo = $secoundData->foo;
