@@ -97,4 +97,25 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $response = $this->client->getDoc('client_test1', 'not_exists_document_id');
     }
+
+    public function testDeleteDocument()
+    {
+        $this->setExpectedException("Klinai\Client\Exception\DocumentNotExistsException");
+
+
+        $response = $this->client->storeDoc('client_test1', array(
+            'foo'=>'dummy',
+            'bar'=>'dummy',
+        ));
+
+        $doc = $this->client->getDoc('client_test1', $response->id);
+
+        $this->assertObjectHasAttribute('_id',$doc->getFields());
+        $this->assertObjectHasAttribute('_rev',$doc->getFields());
+
+        $this->client->deleteDocument('client_test1', $doc);
+
+        $this->assertNull($doc);
+        $client->getDoc('client_test1', $response->id);
+    }
 }
