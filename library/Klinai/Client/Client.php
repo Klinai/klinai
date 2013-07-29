@@ -280,14 +280,14 @@ class Client extends AbstractClient
                 break;
             case 'attachment':
                 $uriBuffer[0][]=$databaseData['host'];
-                $uriBuffer[0][]=$database;
+                $uriBuffer[0][]=$databaseData['dbname'];
                 $uriBuffer[0][]=$buildOptions['docId'];
                 $uriBuffer[0][]=$buildOptions['attachmentId'];
                 $uriBuffer[1]=$buildOptions['parameters'];
                 break;
             case 'view':
                 $uriBuffer[0][]=$databaseData['host'];
-                $uriBuffer[0][]=$database;
+                $uriBuffer[0][]=$databaseData['dbname'];
                 $uriBuffer[0][]='_design';
                 $uriBuffer[0][]=$buildOptions['designId'];
                 $uriBuffer[0][]='_view';
