@@ -4,6 +4,7 @@ namespace KlinaiTest\Client;
 
 use Klinai\Client\ClientConfig;
 use Klinai\Client\Client;
+use Klinai\Client\Exception\RequestException;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +52,20 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $doc = $this->client->getDoc('client_test1', $docResponse->id);
         $docRev = $doc->_rev;
 
-        $this->client->storeAttachmentByFile('client_test1', $doc, $attachmentId, $attachmentFilePath);
+        /**
+         * @link https://github.com/zendframework/zf2/pull/4897
+         */
+        try {
+            $this->client->storeAttachmentByFile('client_test1', $doc, $attachmentId, $attachmentFilePath);
+        } catch (RequestException $e ) {
+            /* @var $pre \RuntimeException */
+            $pre = $e->getPrevious();
+            if ( $pre instanceof \Zend\Http\Client\Adapter\Exception\RuntimeException &&
+                 $pre->getMessage() == "Cannot set a file-handle for cURL option CURLOPT_INFILE without also setting its size in CURLOPT_INFILESIZE.")
+            {
+                $this->markTestSkipped("this test can't work because the \Zend\Http\Client has an issue");
+            }
+        }
 
         // rev must be changed if attachment is stored
         $this->assertNotEquals($docRev, $doc->_rev);
@@ -61,6 +75,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($docNew->_rev, $doc->_rev);
 
         $this->assertTrue($docNew->isAttachmentExists($attachmentId));
+
     }
 
     public function testStoreAttachmentFailByNotExists()
@@ -77,7 +92,20 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $docResponse = $this->client->storeDoc('client_test1', $docData);
         $doc = $this->client->getDoc('client_test1', $docResponse->id);
 
-        $this->client->storeAttachmentByFile('client_test1', $doc, $attachmentId, $attachmentFilePath);
+        /**
+         * @link https://github.com/zendframework/zf2/pull/4897
+         */
+        try {
+            $this->client->storeAttachmentByFile('client_test1', $doc, $attachmentId, $attachmentFilePath);
+        } catch (RequestException $e ) {
+            /* @var $pre \RuntimeException */
+            $pre = $e->getPrevious();
+            if ( $pre instanceof \Zend\Http\Client\Adapter\Exception\RuntimeException &&
+            $pre->getMessage() == "Cannot set a file-handle for cURL option CURLOPT_INFILE without also setting its size in CURLOPT_INFILESIZE.")
+            {
+                $this->markTestSkipped("this test can't work because the \Zend\Http\Client has an issue");
+            }
+        }
     }
 
     public function testUpdateDoc()
