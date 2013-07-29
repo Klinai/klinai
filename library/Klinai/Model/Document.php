@@ -119,7 +119,7 @@ class Document
 
     public static function validRev($value,$oldValue=null)
     {
-        if ( !preg_match('/(?<revNumber>\d+)-(?<hash>[a-z0-9]{32})/', $subject,$matches) ) {
+        if ( !preg_match('/(?<revNumber>\d+)-(?<hash>[a-z0-9]{32})/', $value,$matches) ) {
             return false;
         }
         if ( $oldValue === null ) {
