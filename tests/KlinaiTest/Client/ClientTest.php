@@ -41,7 +41,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testStoreAttachment()
     {
         $attachmentId = 'attachment.txt';
-        $attachmentFilePath = __DIR__ . '/' . $attachmentId;
+        $attachmentFilePath = __DIR__ . '/_files/' . $attachmentId;
 
         $docData = array(
                 'key1'=>'foo',
