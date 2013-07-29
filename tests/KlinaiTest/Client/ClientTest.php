@@ -38,6 +38,48 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testStoreAttachment()
+    {
+        $attachmentId = 'attachment.txt';
+        $attachmentFilePath = __DIR__ . '/' . $attachmentId;
+
+        $docData = array(
+                'key1'=>'foo',
+                'key2'=>'bar',
+        );
+        $docResponse = $this->client->storeDoc('client_test1', $docData);
+        $doc = $this->client->getDoc('client_test1', $docResponse->id);
+        $docRev = $doc->_rev;
+
+        $this->client->storeAttachmentByFile('client_test1', $doc, $attachmentId, $attachmentFilePath);
+
+        // rev must be changed if attachment is stored
+        $this->assertNotEquals($docRev, $doc->_rev);
+
+        // a new document object must the same rev value
+        $docNew = $this->client->getDoc('client_test1', $docResponse->id);
+        $this->assertEquals($docNew->_rev, $doc->_rev);
+
+        $this->assertTrue($docNew->isAttachmentExists($attachmentId));
+    }
+
+    public function testStoreAttachmentFailByNotExists()
+    {
+        $this->setExpectedException('Klinai\Client\Exception\AttachmentFileIsNotReadableException');
+
+        $attachmentId = 'notExistsFile.txt';
+        $attachmentFilePath = __DIR__ . '/' . $attachmentId;
+
+        $docData = array(
+                'key1'=>'foo',
+                'key2'=>'bar',
+        );
+        $docResponse = $this->client->storeDoc('client_test1', $docData);
+        $doc = $this->client->getDoc('client_test1', $docResponse->id);
+
+        $this->client->storeAttachmentByFile('client_test1', $doc, $attachmentId, $attachmentFilePath);
+    }
+
     public function testUpdateDoc()
     {
         $docData1 = array(
