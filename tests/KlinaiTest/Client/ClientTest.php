@@ -68,7 +68,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Klinai\Client\Exception\AttachmentFileIsNotReadableException');
 
         $attachmentId = 'notExistsFile.txt';
-        $attachmentFilePath = __DIR__ . '/' . $attachmentId;
+        $attachmentFilePath = __DIR__ . '/_files/' . $attachmentId;
 
         $docData = array(
                 'key1'=>'foo',
