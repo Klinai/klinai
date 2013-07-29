@@ -108,6 +108,29 @@ class Document
         return TRUE;
     }
 
+    public function updateRev($value)
+    {
+        if ( !static::validRev($value) ) {
+            throw new \RuntimeException(sprintf('the rev "%s" is not valid',$value));
+        }
+
+        $this->fields->_rev = $value;
+    }
+
+    public static function validRev($value,$oldValue=null)
+    {
+        if ( !preg_match('/(?<revNumber>\d+)-(?<hash>[a-z0-9]{32})/', $subject,$matches) ) {
+            return false;
+        }
+        if ( $oldValue === null ) {
+            return true;
+        }
+
+        $revNumber = split('-', $oldValue)[0];
+
+        return $matches['revNumber'] > $revNumber;
+    }
+
     public function __set($key , $value = NULL)
     {
         $this->set($key,$value);
