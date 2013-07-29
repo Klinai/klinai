@@ -5,6 +5,7 @@ namespace Klinai\Client;
 use Klinai\Model\Document;
 
 use Zend\Http\Request;
+use Klinai\Client\Exception\AttachmentFileIsNotReadableException;
 
 class Client extends AbstractClient
 {
