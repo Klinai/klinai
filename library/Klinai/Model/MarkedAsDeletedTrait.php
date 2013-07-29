@@ -5,7 +5,7 @@ namespace Klinai\Model;
 use Klinai\Model\Exception\MarkedAsDeletedException;
 trait MarkedAsDeletedTrait {
 
-    private $deleted;
+    private $deleted = false;
 
     protected function setDeleted()
     {
