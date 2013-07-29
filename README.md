@@ -13,3 +13,4 @@ Master: [![Build Status](https://secure.travis-ci.org/Klinai/klinai.png?branch=m
  * Custom client
 * [UnitTests](./tests/TODO.md)
 * Documentation mit sphinx (i18n)
+* Document object register (caching)
