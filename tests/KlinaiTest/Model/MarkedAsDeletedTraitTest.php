@@ -62,18 +62,18 @@ class MarkedAsDeletedTraitTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->rp_deleted->getValue($this->traitObject));
     }
 
-    public function testcheckDeleteForDoSomethingFailed ()
+    public function testCheckDeleteForDoSomethingFailed ()
     {
-        $this->rp_deleted->setValue($this->traitObject,true);
-
         $this->setExpectedException('Klinai\Model\Exception\MarkedAsDeletedException');
+
+        $this->rp_deleted->setValue($this->traitObject,true);
 
         $this->rm_checkDeleteForDoSomething->invoke($this->traitObject);
     }
 
-    public function testcheckDeleteForDoSomethingSuccess ()
+    public function testCheckDeleteForDoSomethingSuccess ()
     {
-        $this->assertTrue($this->rp_deleted->getValue($this->traitObject));
+        $this->assertFalse($this->rp_deleted->getValue($this->traitObject));
 
         $this->rm_checkDeleteForDoSomething->invoke($this->traitObject);
     }
