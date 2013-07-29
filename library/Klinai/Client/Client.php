@@ -125,6 +125,10 @@ class Client extends AbstractClient
 
     public function storeAttachmentByFile($databaseName, Document $doc, $attachmentId, $attachmentFilePath)
     {
+        if (!file_exists( $attachmentFilePath ) || !is_readable($attachmentFilePath) ) {
+            throw new AttachmentFileIsNotReadableException(sprintf('the file "%s" is not readable' , $attachmentFilePath) );
+        }
+
         $parameters = array('rev'=>$doc->get('_rev') );
 
         $uriOptions = array(
@@ -138,12 +142,16 @@ class Client extends AbstractClient
         $request = $this->getRequest();
         $request->setUri($uri);
         $request->setMethod($request::METHOD_PUT);
+        $request->setContent( fopen($attachmentFilePath, 'r') );
 
         $response = $this->sendRequest();
 
         if ( !is_string($response) && isset($response->error) ) {
             throw $this->createExceptionInstance($response, $uriOptions, array('uri'=>$uri));
         }
+
+        $doc->updateRev($response->rev);
+
         return $response;
     }
 
