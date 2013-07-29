@@ -130,6 +130,11 @@ class Client extends AbstractClient
             throw new AttachmentFileIsNotReadableException(sprintf('the file "%s" is not readable' , $attachmentFilePath) );
         }
 
+        if ( $attachmentId === null ) {
+            $attachmentId = basename($attachmentFilePath);
+        }
+        $fileSize = filesize($attachmentFilePath);
+
         $parameters = array('rev'=>$doc->get('_rev') );
 
         $uriOptions = array(
@@ -144,6 +149,7 @@ class Client extends AbstractClient
         $request->setUri($uri);
         $request->setMethod($request::METHOD_PUT);
         $request->setContent( fopen($attachmentFilePath, 'r') );
+        $request->getHeaders()->addHeaderLine('Content-Length',$fileSize);
 
         $response = $this->sendRequest();
 
