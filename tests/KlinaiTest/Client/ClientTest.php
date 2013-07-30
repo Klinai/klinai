@@ -39,6 +39,31 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testDeleteAttachment()
+    {
+        $attachmentId = 'attachment.txt';
+        $attachmentFilePath = __DIR__ . '/_files/' . $attachmentId;
+
+        $docData = array(
+                'key1'=>'foo',
+                'key2'=>'bar',
+        );
+        $docResponse = $this->client->storeDoc('client_test1', $docData);
+        $doc = $this->client->getDoc('client_test1', $docResponse->id);
+        $docRev = $doc->_rev;
+
+        $this->client->storeAttachmentByContent('client_test1', $doc, $attachmentId, file_get_contents($attachmentFilePath), 'text/plain');
+        $doc = $this->client->getDoc('client_test1', $docResponse->id);
+
+        $this->assertTrue($docNew->isAttachmentExists($attachmentId));
+
+        $this->client->deleteAttachment('client_test1', $doc, $attachmentId);
+        $doc = $this->client->getDoc('client_test1', $docResponse->id);
+
+        $this->assertFalse($doc->isAttachmentExists($attachmentId));
+        $this->assertRegExp('/^3-.*/', $doc->_rev);
+    }
+
     public function testStoreAttachmentByContent()
     {
         $attachmentId = 'attachment.txt';
