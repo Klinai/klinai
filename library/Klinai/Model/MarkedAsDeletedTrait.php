@@ -7,7 +7,7 @@ trait MarkedAsDeletedTrait {
 
     private $deleted = false;
 
-    protected function setDeleted()
+    public function setDeleted()
     {
         $this->deleted = true;
     }
