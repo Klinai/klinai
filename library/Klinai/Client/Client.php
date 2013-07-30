@@ -124,6 +124,63 @@ class Client extends AbstractClient
         return $response;
     }
 
+    public function storeAttachmentByContent($databaseName, Document $doc, $attachmentId, $attachmentContent, $contentType=null)
+    {
+        if ( $contentType == null ) {
+            if (is_string($attachmentContent) ) {
+                $contentType = 'text/plain';
+            } elseif (is_array($attachmentContent) ||
+                      is_int($attachmentContent) ||
+                      is_float($attachmentContent) ||
+                      is_bool($attachmentContent) ) {
+                $contentType = 'application/javascript';
+                $attachmentContent = json_encode($attachmentContent);
+            } elseif (is_object($attachmentContent) ) {
+                $contentType = 'application/javascript';
+                if ( $attachmentContent instanceof \Serializable ) {
+                    $attachmentContent = json_encode($attachmentContent->serialize());
+                } elseif (method_exists($attachmentContent,'toArray')) {
+                    $attachmentContent = json_encode($attachmentContent->toArray());
+                } else {
+                    $contentType = null;
+                }
+            }
+        }
+
+        if ( $contentType == null ) {
+            throw new \RuntimeException('Can`t detect content type by given content');
+        }
+
+        $contentSize = strlen($attachmentContent);
+
+        $parameters = array('rev'=>$doc->get('_rev') );
+
+        $uriOptions = array(
+            'database'=>$databaseName,
+            'docId'=>$doc->get('_id'),
+            'attachmentId'=>$attachmentId,
+            'parameters'=>array_merge($parameters,$this->getRequestParameters())
+        );
+        $uri = $this->buildUri($uriOptions);
+
+        $request = $this->getRequest();
+        $request->setUri($uri);
+        $request->setMethod($request::METHOD_PUT);
+        $request->setContent( $attachmentContent );
+        $request->getHeaders()->addHeaderLine('Content-Type',$contentType);
+        $request->getHeaders()->addHeaderLine('Content-Length',$contentSize);
+
+        $response = $this->sendRequest();
+
+        if ( !is_string($response) && isset($response->error) ) {
+            throw $this->createExceptionInstance($response, $uriOptions, array('uri'=>$uri));
+        }
+
+        $doc->updateRev($response->rev);
+
+        return $response;
+    }
+
     public function storeAttachmentByFile($databaseName, Document $doc, $attachmentId, $attachmentFilePath, $contentType=null)
     {
         if (!file_exists( $attachmentFilePath ) || !is_readable($attachmentFilePath) ) {
