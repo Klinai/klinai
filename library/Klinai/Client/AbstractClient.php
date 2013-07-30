@@ -47,6 +47,9 @@ abstract class AbstractClient
     public function sendRequest ($jsonDecode=true)
     {
         try {
+            if ( !$this->getRequest()->getHeaders()->has('content-type') ) {
+                $this->request->getHeaders()->addHeaderLine('content-type','application/json');
+            }
             $responseContent = $this->getHttpClient()->send($this->getRequest());
             $this->initRequest();
         } catch (\RuntimeException $e) {
@@ -78,7 +81,6 @@ abstract class AbstractClient
     public function initRequest ()
     {
         $this->request = new Request();
-        $this->request->getHeaders()->addHeaderLine('content-type','application/json');
     }
     public function initAdapter ()
     {
