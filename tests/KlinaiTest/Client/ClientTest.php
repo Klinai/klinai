@@ -39,6 +39,31 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testStoreAttachmentByContent()
+    {
+        $attachmentId = 'attachment.txt';
+        $attachmentFilePath = __DIR__ . '/_files/' . $attachmentId;
+
+        $docData = array(
+                'key1'=>'foo',
+                'key2'=>'bar',
+        );
+        $docResponse = $this->client->storeDoc('client_test1', $docData);
+        $doc = $this->client->getDoc('client_test1', $docResponse->id);
+        $docRev = $doc->_rev;
+
+        $this->client->storeAttachmentByContent('client_test1', $doc, $attachmentId, file_get_contents($attachmentFilePath), 'text/plain');
+
+        // rev must be changed if attachment is stored
+        $this->assertNotEquals($docRev, $doc->_rev);
+
+        // a new document object must the same rev value
+        $docNew = $this->client->getDoc('client_test1', $docResponse->id);
+        $this->assertEquals($docNew->_rev, $doc->_rev);
+
+        $this->assertTrue($docNew->isAttachmentExists($attachmentId));
+    }
+
     public function testStoreAttachmentByFile()
     {
         $attachmentId = 'attachment.txt';
@@ -75,7 +100,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($docNew->_rev, $doc->_rev);
 
         $this->assertTrue($docNew->isAttachmentExists($attachmentId));
-
     }
 
     public function testStoreAttachmentByFileFailByNotExists()
