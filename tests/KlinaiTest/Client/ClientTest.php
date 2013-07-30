@@ -235,7 +235,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->client->deleteDocument('client_test1', $doc);
 
-        $this->assertNull($doc);
         $this->client->getDoc('client_test1', $response->id);
     }
 }

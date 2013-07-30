@@ -301,7 +301,7 @@ class Client extends AbstractClient
             'parameters'=>array_merge($parameters,$this->getRequestParameters())
         );
         $uri = $this->buildUri($uriOptions);
-        echo $uri;
+
         $request = $this->getRequest();
         $request->setUri($uri);
         $request->setMethod($request::METHOD_DELETE);
