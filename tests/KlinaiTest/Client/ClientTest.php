@@ -39,7 +39,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function testStoreAttachment()
+    public function testStoreAttachmentByFile()
     {
         $attachmentId = 'attachment.txt';
         $attachmentFilePath = __DIR__ . '/_files/' . $attachmentId;
@@ -78,7 +78,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function testStoreAttachmentFailByNotExists()
+    public function testStoreAttachmentByFileFailByNotExists()
     {
         $this->setExpectedException('Klinai\Client\Exception\AttachmentFileIsNotReadableException');
 
@@ -107,6 +107,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             }
         }
     }
+
 
     public function testUpdateDoc()
     {
