@@ -124,7 +124,7 @@ class Client extends AbstractClient
         return $response;
     }
 
-    public function storeAttachmentByFile($databaseName, Document $doc, $attachmentId, $attachmentFilePath)
+    public function storeAttachmentByFile($databaseName, Document $doc, $attachmentId, $attachmentFilePath, $contentType=null)
     {
         if (!file_exists( $attachmentFilePath ) || !is_readable($attachmentFilePath) ) {
             throw new AttachmentFileIsNotReadableException(sprintf('the file "%s" is not readable' , $attachmentFilePath) );
@@ -132,6 +132,28 @@ class Client extends AbstractClient
 
         if ( $attachmentId === null ) {
             $attachmentId = basename($attachmentFilePath);
+        }
+        if ( $contentType == null ) {
+            $fileInfo = pathinfo($attachmentFilePath);
+
+            if ( !isset($fileInfo['extension']) ) {
+                throw new \RuntimeException('can`t detect the conntent type form a file without file extension');
+            }
+
+            switch ($fileInfo['extension']) {
+                case 'png':
+                case 'jpg':
+                case 'jpeg':
+                case 'gif':
+                    $contentType = 'image/' . $ending;
+                    break;
+                case 'txt':
+                case 'text':
+                    $contentType = 'text/plain';
+                    break;
+                default:
+                    throw new \RuntimeException(sprintf('can`t detect the conntent type for "%s"', $fileInfo['extension'] ));
+            }
         }
         $fileSize = filesize($attachmentFilePath);
 
@@ -149,6 +171,7 @@ class Client extends AbstractClient
         $request->setUri($uri);
         $request->setMethod($request::METHOD_PUT);
         $request->setContent( fopen($attachmentFilePath, 'r') );
+        $request->getHeaders()->addHeaderLine('Content-Type',$contentType);
         $request->getHeaders()->addHeaderLine('Content-Length',$fileSize);
 
         $response = $this->sendRequest();
