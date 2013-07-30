@@ -55,7 +55,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->client->storeAttachmentByContent('client_test1', $doc, $attachmentId, file_get_contents($attachmentFilePath), 'text/plain');
         $doc = $this->client->getDoc('client_test1', $docResponse->id);
 
-        $this->assertTrue($docNew->isAttachmentExists($attachmentId));
+        $this->assertTrue($doc->isAttachmentExists($attachmentId));
 
         $this->client->deleteAttachment('client_test1', $doc, $attachmentId);
         $doc = $this->client->getDoc('client_test1', $docResponse->id);
