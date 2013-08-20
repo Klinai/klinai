@@ -89,6 +89,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($docNew->isAttachmentExists($attachmentId));
     }
 
+    /**
+     * @link https://github.com/zendframework/zf2/pull/4897 for a issues
+     */
     public function testStoreAttachmentByFile()
     {
         $attachmentId = 'attachment.txt';
@@ -102,20 +105,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $doc = $this->client->getDoc('client_test1', $docResponse->id);
         $docRev = $doc->_rev;
 
-        /**
-         * @link https://github.com/zendframework/zf2/pull/4897
-         */
-        try {
-            $this->client->storeAttachmentByFile('client_test1', $doc, $attachmentId, $attachmentFilePath);
-        } catch (RequestException $e ) {
-            /* @var $pre \RuntimeException */
-            $pre = $e->getPrevious();
-            if ( $pre instanceof \Zend\Http\Client\Adapter\Exception\RuntimeException &&
-                 $pre->getMessage() == "Cannot set a file-handle for cURL option CURLOPT_INFILE without also setting its size in CURLOPT_INFILESIZE.")
-            {
-                $this->markTestSkipped("this test can't work because the \Zend\Http\Client has an issue");
-            }
-        }
+        $this->client->storeAttachmentByFile('client_test1', $doc, $attachmentId, $attachmentFilePath);
 
         // rev must be changed if attachment is stored
         $this->assertNotEquals($docRev, $doc->_rev);
