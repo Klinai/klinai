@@ -141,20 +141,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $docResponse = $this->client->storeDoc('client_test1', $docData);
         $doc = $this->client->getDoc('client_test1', $docResponse->id);
 
-        /**
-         * @link https://github.com/zendframework/zf2/pull/4897
-         */
-        try {
-            $this->client->storeAttachmentByFile('client_test1', $doc, $attachmentId, $attachmentFilePath);
-        } catch (RequestException $e ) {
-            /* @var $pre \RuntimeException */
-            $pre = $e->getPrevious();
-            if ( $pre instanceof \Zend\Http\Client\Adapter\Exception\RuntimeException &&
-            $pre->getMessage() == "Cannot set a file-handle for cURL option CURLOPT_INFILE without also setting its size in CURLOPT_INFILESIZE.")
-            {
-                $this->markTestSkipped("this test can't work because the \Zend\Http\Client has an issue");
-            }
-        }
+
+        $this->client->storeAttachmentByFile('client_test1', $doc, $attachmentId, $attachmentFilePath);
     }
 
 
