@@ -21,7 +21,7 @@
         "psr-0": {
             "Klinai\\": "library"
         }
-    }
+    },
     "support": {
         "issues": "https://github.com/Klinai/klinai/issues",
         "source": "https://github.com/Klinai/klinai",
