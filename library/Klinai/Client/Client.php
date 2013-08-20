@@ -6,6 +6,7 @@ use Klinai\Model\Document;
 
 use Zend\Http\Request;
 use Klinai\Client\Exception\AttachmentFileIsNotReadableException;
+use Klinai\Model\Attachment;
 
 class Client extends AbstractClient
 {
@@ -317,7 +318,13 @@ class Client extends AbstractClient
 
     public function getAttachment($databaseName, $docId, $attachmentId)
     {
-        throw new \Exception("currently not ready");
+        $doc = $this->getDoc($databaseName, $docId);
+
+        if ( !$doc->isAttachmentExists($attachmentId) ) {
+            throw new \RuntimeException("currently not ready");
+        }
+
+        return $doc->getAttachment($attachmentId);
     }
 
     public function getAttachmentContent($databaseName, $docId, $attachmentId)
@@ -342,9 +349,15 @@ class Client extends AbstractClient
         return $response;
     }
 
-    public function getAttachmentAll($doc,$databaseName)
+    public function getAttachmentAll($databaseName,$docId)
     {
-        throw new \Exception("currently not ready");
+        $doc = $this->getDoc($databaseName, $docId);
+
+        if ( !$doc->isAttachmentExists($attachmentId) ) {
+            throw new \RuntimeException("currently not ready");
+        }
+
+        return $doc->getAttachmentAll();
     }
 
     public function buildUri($buildOptions)

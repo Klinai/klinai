@@ -204,7 +204,18 @@ class Document
     public function getAttachmentAll()
     {
         $this->checkDeleteForDoSomething();
+        if ( !isset($this->fields->_attachments) ||
+             is_array($this->fields->_attachments) && count($this->fields->_attachments)
+        ) {
+            return array();
+        }
 
+        $attachmentsArray = array();
+        foreach ( $this->fields->_attachments as $attachmentId=>$attachmentData ) {
+            $attachmentsArray[ $attachmentId ] = new Attachment($attachmentId, $attachmentData, $this, $this->getClient());
+        }
+
+        return $attachmentsArray;
     }
 
     public function disableAutoRecord()
