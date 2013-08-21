@@ -10,10 +10,9 @@
         "multiable client"
     ],
     "description": "Multi CouchDB Client",
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4",
-        "zendframework/zendframework": "dev-master"
+        "zendframework/zend-http": ">=2.2.3,<3"
     },
     "require-dev": {
         "phpunit/phpunit": "~3.7"
