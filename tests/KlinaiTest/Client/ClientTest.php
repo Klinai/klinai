@@ -55,9 +55,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client = $this->getMock('Klinai\Client\Client');
         $client->setConfig($this->config);
 
+        $json_return = json_decode('{"error":"not_found","reason":"no_db_file"}');
         $client->expects($this->once())
                ->method('sendRequest')
-               ->will($this->returnValue('{"error":"not_found","reason":"no_db_file"}'));
+               ->will($this->returnValue($json_return));
 
         $client->storeDoc('not_exists_database', $docData);
     }
