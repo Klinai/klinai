@@ -79,8 +79,6 @@
                 <arg value="-c" />
                 <arg value="${basedir}/tests/phpunit.xml.dist" />
                 <arg value="${basedir}/tests/KlinaiTest/@{component}" />
-                <arg value="--coverage-php" />
-                <arg value="${basedir}/build/cov/coverage-${component}.cov" />
                 <arg value="--coverage-clover" />
                 <arg value="${basedir}/build/logs/clover-${component}.xml" />
             </exec>
