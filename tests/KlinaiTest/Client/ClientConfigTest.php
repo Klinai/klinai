@@ -71,6 +71,10 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
         $config->isConfigValid(array(),true);
     }
 
+
+    /**
+     * @covers ClientConfig::getDataForIndex
+     */
     public function testGetConfigData()
     {
         $config = new ClientConfig($this->configArray);
@@ -86,6 +90,9 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($config->hasDatabase("notExistsDatabaseIndex"));
     }
 
+    /**
+     * @covers ClientConfig::getDataForIndex
+     */
     public function testGetNoExistDatabase()
     {
         $this->setExpectedException("Klinai\Client\Exception\DatabaseIndexIsNotExistsException");
