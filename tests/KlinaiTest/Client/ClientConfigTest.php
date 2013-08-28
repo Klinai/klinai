@@ -72,15 +72,23 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    /**
-     * @covers ClientConfig::getDataForIndex
-     */
     public function testGetConfigData()
     {
         $config = new ClientConfig($this->configArray);
 
-        $config->getDataForIndex('client_test1');
-        $config->getDataForIndex('client_test2');
+        $key = 'client_test1';
+        $data = $config->getDataForIndex($key);
+
+        $this->assertArrayHasKey( 'dbname', $data) ;
+        $this->assertArrayHasKey( 'host', $data) ;
+        $this->assertEquals( $data, $this->configArray[$key]) ;
+
+        $key = 'client_test2';
+        $data = $config->getDataForIndex($key);
+
+        $this->assertArrayHasKey( 'dbname', $data) ;
+        $this->assertArrayHasKey( 'host', $data) ;
+        $this->assertEquals( $data, $this->configArray[$key]) ;
     }
 
     public function testNoExistDatabase()
