@@ -39,6 +39,29 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testStoreDocWithWrongDoc()
+    {
+        $this->setExpectedException("Klinai\Client\Exception\InvalidArgumentException");
+
+        $docData = 2;
+
+        $this->client->storeDoc('client_test1', $docData);
+    }
+
+    public function testStoreDocWithWrongDoc()
+    {
+        $this->setExpectedException("Klinai\Client\Exception\DatabaseNotExistsException");
+
+        $client = $this->getMock('Klinai\Client\Client');
+        $client->setConfig($this->config);
+
+        $client->expects($this->once())
+               ->method('sendRequest')
+               ->will($this->returnValue('{"error":"not_found","reason":"no_db_file"}'));
+
+        $client->storeDoc('not_exists_database', $docData);
+    }
+
     public function testDeleteAttachment()
     {
         $attachmentId = 'attachment.txt';

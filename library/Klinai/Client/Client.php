@@ -2,11 +2,12 @@
 
 namespace Klinai\Client;
 
-use Klinai\Model\Document;
-
 use Zend\Http\Request;
+
 use Klinai\Client\Exception\AttachmentFileIsNotReadableException;
+use Klinai\Client\Exception\InvalidArgumentException;
 use Klinai\Model\Attachment;
+use Klinai\Model\Document;
 
 class Client extends AbstractClient
 {
@@ -71,6 +72,10 @@ class Client extends AbstractClient
         return $this->resultsToCouchDocuments($response, $databaseName);
     }
 
+    /**
+     *
+     * @codeCoverageIgnore
+     */
     public function storeDocByArray($databaseName, $docData)
     {
         if ( !$docData instanceof \stdClass && !is_array($docData)
@@ -90,7 +95,7 @@ class Client extends AbstractClient
              !$doc instanceof \stdClass &&
              !is_array($doc)
         ) {
-            throw new RuntimeException("doc is not a instance of (Document or stdClass or Array)");
+            throw new InvalidArgumentException("doc is not a instance of (Document or stdClass or Array)");
         }
 
         if ( !$doc instanceof Document ) {
