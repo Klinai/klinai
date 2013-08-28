@@ -81,14 +81,14 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey( 'dbname', $data) ;
         $this->assertArrayHasKey( 'host', $data) ;
-        $this->assertEquals( $data, $this->configArray[$key]) ;
+        $this->assertEquals( $data, $this->configArray['databases'][$key]) ;
 
         $key = 'client_test2';
         $data = $config->getDataForIndex($key);
 
         $this->assertArrayHasKey( 'dbname', $data) ;
         $this->assertArrayHasKey( 'host', $data) ;
-        $this->assertEquals( $data, $this->configArray[$key]) ;
+        $this->assertEquals( $data, $this->configArray['databases'][$key]) ;
     }
 
     public function testNoExistDatabase()
