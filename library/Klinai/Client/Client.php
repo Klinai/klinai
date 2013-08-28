@@ -74,6 +74,7 @@ class Client extends AbstractClient
 
     /**
      *
+     * @deprecated
      * @codeCoverageIgnore
      */
     public function storeDocByArray($databaseName, $docData)
