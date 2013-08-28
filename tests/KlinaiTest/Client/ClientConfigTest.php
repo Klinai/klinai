@@ -99,7 +99,7 @@ class ClientConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ClientConfig::getDataForIndex
+     * @covers \Klinai\Client\ClientConfig::getDataForIndex
      */
     public function testGetNoExistDatabase()
     {
