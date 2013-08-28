@@ -77,10 +77,10 @@
                 append="true"
             >
                 <arg value="-c" />
-                <arg value="${basedir}/tests/phpunit.xml.dist" />
-                <arg value="${basedir}/tests/KlinaiTest/@{component}" />
                 <arg value="--coverage-clover" />
                 <arg value="${basedir}/build/logs/clover-${component}.xml" />
+                <arg value="${basedir}/tests/phpunit.xml.dist" />
+                <arg value="${basedir}/tests/KlinaiTest/@{component}" />
             </exec>
         </sequential>
     </macrodef>
