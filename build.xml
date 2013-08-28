@@ -76,9 +76,9 @@
                 failonerror="true"
                 append="true"
             >
-                <arg value="-c" />
                 <arg value="--coverage-clover" />
                 <arg value="${basedir}/build/logs/clover-${component}.xml" />
+                <arg value="-c" />
                 <arg value="${basedir}/tests/phpunit.xml.dist" />
                 <arg value="${basedir}/tests/KlinaiTest/@{component}" />
             </exec>
