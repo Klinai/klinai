@@ -48,7 +48,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->client->storeDoc('client_test1', $docData);
     }
 
-    public function testStoreDocWithWrongDoc()
+    public function testStoreDocWithSomeError()
     {
         $this->setExpectedException("Klinai\Client\Exception\DatabaseNotExistsException");
 
