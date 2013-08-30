@@ -122,29 +122,25 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testStoreAttachmentByContentAsObjectWithoutContentType()
     {
         $attachmentData = (object) array(
-            'key1'=>'foo',
-            'key2'=>'bar',
+            'class'=>'stdClass',
         );
 
         $this->storeAttachmentByContent($attachmentData, null );
 
         $attachmentData = new \ObjectToArray (array(
-                'key1'=>'foo',
-                'key2'=>'bar',
+            'class'=>'ObjectToArray',
         ));
 
         $this->storeAttachmentByContent($attachmentData, null );
 
         $attachmentData = new \ObjectToJson(array(
-                'key1'=>'foo',
-                'key2'=>'bar',
+            'class'=>'ObjectToJson',
         ));
 
         $this->storeAttachmentByContent($attachmentData, null );
 
         $attachmentData = new \ObjectJson(array(
-                'key1'=>'foo',
-                'key2'=>'bar',
+            'class'=>'ObjectJson',
         ));
 
         $this->storeAttachmentByContent($attachmentData, null );
