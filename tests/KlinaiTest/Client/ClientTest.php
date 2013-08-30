@@ -52,25 +52,27 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
 //         $this->setExpectedException("Klinai\Client\Exception\DatabaseNotExistsException");
 
-        $client = $this->getMock('Klinai\Client\Client');
-        $client->setConfig($this->config);
+//         $client = $this->getMock('Klinai\Client\Client');
+//         $client->setConfig($this->config);
+        $client = $this->client;
 
         $docData = array(
             'key1'=>'foo',
             'key2'=>'bar',
         );
 
-        $json_return = new \stdClass(array(
-            "error"=>"not_found",
-            "reason"=>"no_db_file"
-        ));
-        $client->expects($this->any())
-               ->method('sendRequest')
-               ->will($this->returnValue($json_return));
+//         $json_return = new \stdClass(array(
+//             "error"=>"not_found",
+//             "reason"=>"no_db_file"
+//         ));
+//         $client->expects($this->any())
+//                ->method('sendRequest')
+//                ->will($this->returnValue($json_return));
 
-        $this->assertSame( $client->sendRequest(), $json_return);
+//         $this->assertSame( $client->sendRequest(), $json_return);
         $response = $client->storeDoc('not_exists_database', $docData);
-        $this->assertSame( $response, $json_return);
+        $this->assertTrue( is_object($response) );
+//         $this->assertSame( $response, $json_return);
         $this->assertObjectHasAttribute( 'error', $response);
     }
 
