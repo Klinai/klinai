@@ -50,7 +50,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testStoreDocWithSomeError()
     {
-        $this->setExpectedException("Klinai\Client\Exception\DatabaseNotExistsException");
+//         $this->setExpectedException("Klinai\Client\Exception\DatabaseNotExistsException");
 
         $client = $this->getMock('Klinai\Client\Client');
         $client->setConfig($this->config);
@@ -66,7 +66,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                ->will($this->returnValue($json_return));
 
         $this->assertEquals( $client->sendRequest(), $json_return);
-        $client->storeDoc('not_exists_database', $docData);
+        $response = $client->storeDoc('not_exists_database', $docData);
+        $this->assertObjectHasAttribute( 'error', $response);
     }
 
     public function testDeleteAttachment()
