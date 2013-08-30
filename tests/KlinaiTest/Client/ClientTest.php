@@ -68,8 +68,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                ->method('sendRequest')
                ->will($this->returnValue($json_return));
 
-        $this->assertEquals( $client->sendRequest(), $json_return);
+        $this->assertSame( $client->sendRequest(), $json_return);
         $response = $client->storeDoc('not_exists_database', $docData);
+        $this->assertSame( $response, $json_return);
         $this->assertObjectHasAttribute( 'error', $response);
     }
 
