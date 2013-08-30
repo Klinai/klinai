@@ -56,15 +56,16 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client->setConfig($this->config);
 
         $docData = array(
-                'key1'=>'foo',
-                'key2'=>'bar',
+            'key1'=>'foo',
+            'key2'=>'bar',
         );
 
         $json_return = json_decode('{"error":"not_found","reason":"no_db_file"}');
-        $client->expects($this->once())
+        $client->expects($this->any())
                ->method('sendRequest')
                ->will($this->returnValue($json_return));
 
+        $this->assertEquals( $client->sendRequest(), $json_return);
         $client->storeDoc('not_exists_database', $docData);
     }
 
