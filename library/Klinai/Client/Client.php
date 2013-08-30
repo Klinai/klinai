@@ -124,7 +124,8 @@ class Client extends AbstractClient
                 $uriOptions,
                 array(
                     'uri'=>$uri,
-                    'methode'=>$request->getMethod()
+                    'methode'=>$request->getMethod(),
+                    'content'=>$request->getContent()
                 )
             );
         }
@@ -183,7 +184,9 @@ class Client extends AbstractClient
         $response = $this->sendRequest();
 
         if ( !is_string($response) && isset($response->error) ) {
-            throw $this->createExceptionInstance($response, $uriOptions, array('uri'=>$uri));
+            $extendedData = array('uri'=>$uri,'content'=>$request->getContent);
+
+            throw $this->createExceptionInstance($response, $uriOptions, $extendedData);
         }
 
         $doc->updateRev($response->rev);
