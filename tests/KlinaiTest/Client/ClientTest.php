@@ -152,6 +152,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     protected function storeAttachmentByContent($data,$type=null)
     {
+        $attachmentId = 'attachment1';
+
         $docData = array(
                 'key1'=>'foo',
                 'key2'=>'bar',
