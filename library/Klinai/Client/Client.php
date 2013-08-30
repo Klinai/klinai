@@ -144,8 +144,10 @@ class Client extends AbstractClient
                 $attachmentContent = json_encode($attachmentContent);
             } elseif (is_object($attachmentContent) ) {
                 $contentType = 'application/javascript';
-                if ( $attachmentContent instanceof \Serializable ) {
-                    $attachmentContent = json_encode($attachmentContent->serialize());
+                if ( $attachmentContent instanceof \jsonSerialize ) {
+                    $attachmentContent = json_encode($attachmentContent);
+                } elseif (method_exists($attachmentContent,'toJson')) {
+                    $attachmentContent = $attachmentContent->toJson();
                 } elseif (method_exists($attachmentContent,'toArray')) {
                     $attachmentContent = json_encode($attachmentContent->toArray());
                 } else {
