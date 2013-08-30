@@ -60,7 +60,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             'key2'=>'bar',
         );
 
-        $json_return = json_decode('{"error":"not_found","reason":"no_db_file"}');
+        $json_return = new \stdClass(array(
+            "error"=>"not_found",
+            "reason"=>"no_db_file"
+        ));
         $client->expects($this->any())
                ->method('sendRequest')
                ->will($this->returnValue($json_return));
