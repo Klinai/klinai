@@ -6,6 +6,10 @@ use Klinai\Client\ClientConfig;
 use Klinai\Client\Client;
 use Klinai\Client\Exception\RequestException;
 
+require_once __DIR__ . '/_files/ObjectJson.php';
+require_once __DIR__ . '/_files/ObjectToJson.php';
+require_once __DIR__ . '/_files/ObjectToArray.php';
+
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
     protected $client;
@@ -94,6 +98,60 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $attachmentId = 'attachment.txt';
         $attachmentFilePath = __DIR__ . '/_files/' . $attachmentId;
 
+        $this->storeAttachmentByContent(file_get_contents($attachmentFilePath),'text/plain');
+    }
+
+    public function testStoreAttachmentByContentAsStringWithoutContentType()
+    {
+        $attachmentId = 'attachment.txt';
+        $attachmentFilePath = __DIR__ . '/_files/' . $attachmentId;
+
+        $this->storeAttachmentByContent(file_get_contents($attachmentFilePath), null );
+    }
+
+    public function testStoreAttachmentByContentAsArrayWithoutContentType()
+    {
+        $attachmentData = array(
+            'key1'=>'foo',
+            'key2'=>'bar',
+        );
+
+        $this->storeAttachmentByContent($attachmentData, null );
+    }
+
+    public function testStoreAttachmentByContentAsObjectWithoutContentType()
+    {
+        $attachmentData = (object) array(
+            'key1'=>'foo',
+            'key2'=>'bar',
+        );
+
+        $this->storeAttachmentByContent($attachmentData, null );
+
+        $attachmentData = new \ObjectToArray (array(
+                'key1'=>'foo',
+                'key2'=>'bar',
+        ));
+
+        $this->storeAttachmentByContent($attachmentData, null );
+
+        $attachmentData = new \ObjectToJson(array(
+                'key1'=>'foo',
+                'key2'=>'bar',
+        ));
+
+        $this->storeAttachmentByContent($attachmentData, null );
+
+        $attachmentData = new \ObjectJson(array(
+                'key1'=>'foo',
+                'key2'=>'bar',
+        ));
+
+        $this->storeAttachmentByContent($attachmentData, null );
+    }
+
+    protected function storeAttachmentByContent($data,$type=null)
+    {
         $docData = array(
                 'key1'=>'foo',
                 'key2'=>'bar',
@@ -102,7 +160,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $doc = $this->client->getDoc('client_test1', $docResponse->id);
         $docRev = $doc->_rev;
 
-        $this->client->storeAttachmentByContent('client_test1', $doc, $attachmentId, file_get_contents($attachmentFilePath), 'text/plain');
+        $this->client->storeAttachmentByContent('client_test1', $doc, $attachmentId, $data, $type);
 
         // rev must be changed if attachment is stored
         $this->assertNotEquals($docRev, $doc->_rev);
