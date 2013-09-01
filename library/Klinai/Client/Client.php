@@ -119,13 +119,22 @@ class Client extends AbstractClient
         $response = $this->sendRequest();
 
         if ( isset($response->error) ) {
+            var_dump($response,
+            $uriOptions,
+            array(
+                    'uri'=>$uri,
+                    'methode'=>$request->getMethod(),
+                    'content'=>$request->getContent(),
+                    'content-type'=>$request->getHeaders()->get('content-type'),
+            ));
             throw $this->createExceptionInstance(
                 $response,
                 $uriOptions,
                 array(
                     'uri'=>$uri,
                     'methode'=>$request->getMethod(),
-                    'content'=>$request->getContent()
+                    'content'=>$request->getContent(),
+                    'content-type'=>$request->getHeaders()->get('content-type'),
                 )
             );
         }
