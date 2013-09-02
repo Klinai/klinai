@@ -80,6 +80,7 @@ abstract class AbstractClient
     }
     public function initRequest ()
     {
+        unset($this->request);
         $this->request = new Request();
     }
     public function initAdapter ()

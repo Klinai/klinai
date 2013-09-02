@@ -137,6 +137,15 @@ class Client extends AbstractClient
                     'content-type'=>$request->getHeaders()->get('content-type'),
                 )
             );
+        } else {
+            var_dump($response,
+            $uriOptions,
+            array(
+                    'uri'=>$uri,
+                    'methode'=>$request->getMethod(),
+                    'content'=>$request->getContent(),
+                    'content-type'=>$request->getHeaders()->get('content-type'),
+            ));
         }
         return $response;
     }
