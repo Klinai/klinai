@@ -144,7 +144,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testStoreAttachmentByNotSupportedObjectWithoutContentType()
     {
-        $attachmentData = new TestAsset\ObjectNotSupportedJson(array(
+        $attachmentData = new TestAsset\ObjectNotSupported(array(
             'class'=>'ObjectNotSupportedJson',
         ));
 
