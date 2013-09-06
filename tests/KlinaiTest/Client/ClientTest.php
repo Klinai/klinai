@@ -144,6 +144,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testStoreAttachmentByNotSupportedObjectWithoutContentType()
     {
+        $this->setExpectedException('Klinai\Client\Exception\NotSupportedObjectToSerializeException');
+
         $attachmentData = new TestAsset\ObjectNotSupported(array(
             'class'=>'ObjectNotSupportedJson',
         ));

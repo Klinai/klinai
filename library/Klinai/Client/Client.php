@@ -2,6 +2,8 @@
 
 namespace Klinai\Client;
 
+use Klinai\Client\Exception\NotSupportedObjectToSerializeException;
+
 use Zend\Http\Request;
 
 use Klinai\Client\Exception\AttachmentFileIsNotReadableException;
@@ -153,7 +155,8 @@ class Client extends AbstractClient
                 } elseif (method_exists($attachmentContent,'toArray')) {
                     $attachmentContent = json_encode($attachmentContent->toArray());
                 } else {
-                    $contentType = null;
+                    $message = sprintf("not supported class to serialize [%s]",get_class($doc));
+                    throw new NotSupportedObjectToSerializeException($message);
                 }
             }
         }
