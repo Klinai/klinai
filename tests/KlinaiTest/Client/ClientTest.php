@@ -123,19 +123,19 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->storeAttachmentByContent($attachmentData, null );
 
-        $attachmentData = new TestAssert\ObjectToArray (array(
+        $attachmentData = new TestAsset\ObjectToArray (array(
             'class'=>'ObjectToArray',
         ));
 
         $this->storeAttachmentByContent($attachmentData, null );
 
-        $attachmentData = new TestAssert\ObjectToJson(array(
+        $attachmentData = new TestAsset\ObjectToJson(array(
             'class'=>'ObjectToJson',
         ));
 
         $this->storeAttachmentByContent($attachmentData, null );
 
-        $attachmentData = new TestAssert\ObjectJson(array(
+        $attachmentData = new TestAsset\ObjectJson(array(
             'class'=>'ObjectJson',
         ));
 
@@ -144,7 +144,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testStoreAttachmentByNotSupportedObjectWithoutContentType()
     {
-        $attachmentData = new TestAssert\ObjectNotSupportedJson(array(
+        $attachmentData = new TestAsset\ObjectNotSupportedJson(array(
             'class'=>'ObjectNotSupportedJson',
         ));
 
