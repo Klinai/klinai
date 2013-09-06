@@ -6,10 +6,6 @@ use Klinai\Client\ClientConfig;
 use Klinai\Client\Client;
 use Klinai\Client\Exception\RequestException;
 
-require_once __DIR__ . '/_files/ObjectJson.php';
-require_once __DIR__ . '/_files/ObjectToJson.php';
-require_once __DIR__ . '/_files/ObjectToArray.php';
-
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
     protected $client;
