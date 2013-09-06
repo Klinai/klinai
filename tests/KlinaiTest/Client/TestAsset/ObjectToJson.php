@@ -1,5 +1,7 @@
 <?php
 
+namespace KlinaiTest\Client\TestAsset;
+
 class ObjectToJson {
     protected $data;
 

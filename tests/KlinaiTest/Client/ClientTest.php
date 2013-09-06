@@ -127,20 +127,29 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->storeAttachmentByContent($attachmentData, null );
 
-        $attachmentData = new \ObjectToArray (array(
+        $attachmentData = new TestAssert\ObjectToArray (array(
             'class'=>'ObjectToArray',
         ));
 
         $this->storeAttachmentByContent($attachmentData, null );
 
-        $attachmentData = new \ObjectToJson(array(
+        $attachmentData = new TestAssert\ObjectToJson(array(
             'class'=>'ObjectToJson',
         ));
 
         $this->storeAttachmentByContent($attachmentData, null );
 
-        $attachmentData = new \ObjectJson(array(
+        $attachmentData = new TestAssert\ObjectJson(array(
             'class'=>'ObjectJson',
+        ));
+
+        $this->storeAttachmentByContent($attachmentData, null );
+    }
+
+    public function testStoreAttachmentByNotSupportedObjectWithoutContentType()
+    {
+        $attachmentData = new TestAssert\ObjectNotSupportedJson(array(
+            'class'=>'ObjectNotSupportedJson',
         ));
 
         $this->storeAttachmentByContent($attachmentData, null );

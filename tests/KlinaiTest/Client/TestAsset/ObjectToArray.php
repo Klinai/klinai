@@ -1,13 +1,15 @@
 <?php
 
-class ObjectJson implements \JsonSerializable {
+namespace KlinaiTest\Client\TestAsset;
+
+class ObjectToArray {
     protected $data;
 
     public function __construct($data) {
         $this->data = $data;
     }
 
-    public function jsonSerialize() {
+    public function toArray () {
         return $this->data;
     }
 }
